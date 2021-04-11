@@ -6,6 +6,6 @@ var server = app.listen(8888,function () {
     console.log('Server listening '+port);
 })
 
-app.get('/',function (req,res) {
-    res.send('Hello DBW students');
+app.get('/', function (req, res) {
+    res.sendFile( __dirname + "/view/" + "home.html" );
 })

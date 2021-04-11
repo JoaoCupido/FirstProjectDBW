@@ -19,3 +19,4 @@ app.get('/signup/', function (req, res) {
 })
 
 app.use(express.static(__dirname+'/view/'));
+// FONTE: https://stackoverflow.com/a/56505942

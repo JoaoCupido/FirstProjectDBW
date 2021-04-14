@@ -84,6 +84,14 @@ h2 {
 	/* margin-left: 24%;*/
 }
 
+h2 {
+	font-family: Arial, Helvetica, Sans-serif, serif;
+	font-size: 25px;
+	padding: 8px;
+	color: #0084c6;
+	text-align: center;
+}
+
 input[type="text"] {
 	background-color: #FFFFFF;
 	border: 1px solid #E2E2E2;

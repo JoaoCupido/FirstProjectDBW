@@ -39,6 +39,7 @@ app.post('/signup/', function(req,res){
     console.log(req.body.password);
     console.log(req.body.avatar);
 
+
     //We are using the body-parser so req.body.[name in form will be available]
     NotesController.addNote(req, function () {
         //Let's return all activities once a new one is added

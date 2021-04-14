@@ -22,14 +22,14 @@
 			<table>
 				<tr><br /><br />
 					<td width="100%" valign="top">
-						<form action="#" method="POST">
+						<form action="/signup/" method="POST">
 							<div class="profile-pic-div">
 								<img src="./img/simpleavatar.png" id="photo" alt="Profile Picture">
-								<input type="file" id="file">
+								<input type="file" name="avatar" id="file">
 								<label for="file" id="uploadBtn">Choose</label>
 							</div><br />
 							<input type="text" name="username" size="25" placeholder="Username" required /><br /><br />
-							<input type="password" id="myInput" size="25" placeholder="Password" required /><br /><br />
+							<input type="password" name="password" id="myInput" size="25" placeholder="Password" required /><br /><br />
 							<input type="checkbox" onclick="myFunction()"> Show Password<br /><br />
 							<script>
 							function myFunction() {

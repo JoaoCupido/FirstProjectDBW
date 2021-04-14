@@ -77,10 +77,11 @@
 
 h2 {
 	font-family: Arial, Helvetica, Sans-serif, serif;
-	font-size: 18px;
+	font-size: 30px;
 	padding: 8px;
 	color: #0084c6;
-	margin-left: 24%;
+	text-align: center;
+	/* margin-left: 24%;*/
 }
 
 input[type="text"] {
@@ -164,8 +165,6 @@ body{
 	cursor: pointer;
 }
 
-.homeimage img {
-	width: 340px;
-	height: 300px;
-	padding-top: 5px;
+.homeimage{
+	text-align: center;
 }

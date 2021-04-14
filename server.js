@@ -43,7 +43,7 @@ app.post('/signup/', function(req,res){
     NotesController.addNote(req, function () {
         //Let's return all activities once a new one is added
         NotesController.getAllNotes(function(result){
-            res.json(result);
+            res.json(result); // alterar isto??
         });
     });
 

@@ -9,9 +9,14 @@ var app = express();
 
 app.use(urlencodedParser);
 
+var socketIO = require("socket.io")(mongo);
+var socketID = "";
+var users = [];
+
 app.use(express.static(__dirname+ "/view"));
 // FONTE: https://stackoverflow.com/a/56505942
 // https://stackoverflow.com/questions/48248832/stylesheet-not-loaded-because-of-mime-type
+
 
 mongoConfigs.connect(function(err){
     if(!err){
@@ -20,11 +25,6 @@ mongoConfigs.connect(function(err){
         });
     }
 });
-
-var server = app.listen(8888,function () {
-    var port = server.address().port
-    console.log('Server listening '+port);
-})
 
 app.get('/', function (req, res) {
     res.sendFile( __dirname + "/view/" + "home.html" );
@@ -36,7 +36,7 @@ app.get('/signin/', function (req, res) {
 
 app.post('/signin/', function (req, res) {
     // ERROR: db not found
-    db.collection("G14").findOne({
+    mongoConfigs.getDB().collection("G14").findOne({
         "username": req.body.username
     }, function(error, uname){
         if (uname == null){
@@ -47,7 +47,8 @@ app.post('/signin/', function (req, res) {
         }
         else{
             if(req.body.password === uname.password){
-                res.sendFile( __dirname + "/view/" + "home.html" );
+                res.redirect( '/' );
+                console.log("ur in");
             }
             else {
                 res.json({
@@ -68,7 +69,7 @@ app.post('/signup/', function(req,res){
     console.log(req.body.password);
     console.log(req.body.avatar);
 
-
+    /*
     //We are using the body-parser so req.body.[name in form will be available]
     NotesController.addNote(req, function () {
         //Let's return all activities once a new one is added
@@ -76,5 +77,25 @@ app.post('/signup/', function(req,res){
             res.redirect( '/' );
         });
     });
+    */
+    mongoConfigs.getDB().collection("G14").findOne({
+        "username": req.body.username
+    }, function(error, uname){
+        if (uname !== null){
+            res.json({
+                "status": "error",
+                "message": "Username already taken!"
+            });
+        }
+        else{
+            NotesController.addNote(req, function(){
+                res.json({
+                    "status": "success",
+                    "message": "Signed up successfully!",
+                    "data": req
+                });
+            })
+        }
+    })
 
 });

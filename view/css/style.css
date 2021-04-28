@@ -127,6 +127,7 @@ input[type="password"] {
 	outline: none;
 }
 
+
 input[type="submit"] {
 	background-color: #006FC4;
 	border: 1px solid #00508D;
@@ -180,4 +181,15 @@ body{
 
 .homeimage{
 	text-align: center;
+}
+
+input[type="text_msg"]{
+	background-color: #FFFFFF;
+	border: 1px solid #E2E2E2;
+	font-size: 15px;
+	padding: 5px;
+	width: 300px;
+	margin-bottom: 3px;
+	margin-top: 3px;
+	outline: none;
 }

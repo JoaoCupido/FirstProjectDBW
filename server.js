@@ -11,12 +11,29 @@ app.use(urlencodedParser);
 
 //var socketIO = require("socket.io")(mongoConfigs.getDB());
 //var socketID = "";
-var users = [];
+//var app  = require('express')();
+var http = require('http').createServer(app); //https://www.scaleway.com/en/docs/how-to-install-and-configure-socket-io/
+var io   = require('socket.io')(http);
+var users = {};
 
 app.use(express.static(__dirname+ "/view"));
 // FONTE: https://stackoverflow.com/a/56505942
 // https://stackoverflow.com/questions/48248832/stylesheet-not-loaded-because-of-mime-type
 
+io.on('connection',function(socket){
+    socket.on("join", function(name){
+        console.log(name+" joined server");
+        users[socket.id] = name;
+        io.emit("update", name + " has joined the server.");
+    });
+
+
+    socket.on('chat message',function(msg){
+        console.log('message: '+msg);
+        var mensagem = {msg:msg, id:users[socket.id]};
+        io.emit('chat message', mensagem);
+    })
+});
 
 mongoConfigs.connect(function(err){
     if(!err){
@@ -47,8 +64,9 @@ app.post('/signin/', function (req, res) {
         }
         else{
             if(req.body.password === uname.password){
-                res.redirect( '/' );
+                //res.redirect( '/' );
                 console.log("ur in");
+                res.sendFile( __dirname + "/view/" + "profile.html" );
             }
             else {
                 res.json({

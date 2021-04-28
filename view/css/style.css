@@ -6,12 +6,14 @@
 	background-color: #eff5f9;
 	box-sizing: border-box;
 }
+
 .headerMenu {
 	background-image: url(../img/menubg.png);
 	height: 56px;
 	border-bottom: 0;
 	width: 100%;
 }
+
 #wrapper {
 	background-image: url(../img/menubg.png);
 	margin-left: auto;
@@ -21,15 +23,18 @@
 	padding-top: 0;
 	padding-bottom: 0;
 }
+
 .logo {
 	background-image: url(../img/menubg.png);
 	padding-top: 8px;
 }
+
 .logo img {
 	background-image: url(../img/menubg.png);
 	width: 150px;
 	height: 38px;
 }
+
 @media screen and (max-width: 1280px) {
 #menu{
 	background-image: url(../img/menubg.png);
@@ -41,6 +46,7 @@
 	margin-right: 4%;
 }
 }
+
 @media screen and (min-width: 1280px) {
 #menu{
 	background-image: url(../img/menubg.png);
@@ -52,6 +58,7 @@
 	margin-right: 6%;
 }
 }
+
 @media screen and (min-width: 1920px) {
 #menu{
 	background-image: url(../img/menubg.png);
@@ -63,6 +70,7 @@
 	margin-right: 25%;
 }
 }
+
 #menu a {
 	color: #FFFFFF;
 	text-decoration: none;
@@ -71,6 +79,7 @@
 	background-repeat: no-repeat;
 	padding: 19px 10px 22px;
 }
+
 #menu a:hover {
 	background-image: url(../img/menubg_hovermouseover.png);
 }
@@ -103,7 +112,7 @@ input[type="text"] {
 	outline: none;
 }
 
-input[type="text"]:hover {
+input[type="text"]:hover, input[type="password"]:hover {
 	border: 1px solid #006FC4;
 }
 
@@ -116,10 +125,6 @@ input[type="password"] {
 	margin-bottom: 3px;
 	margin-top: 3px;
 	outline: none;
-}
-
-input[type="password"]:hover {
-	border: 1px solid #006FC4;
 }
 
 input[type="submit"] {

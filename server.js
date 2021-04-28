@@ -9,8 +9,8 @@ var app = express();
 
 app.use(urlencodedParser);
 
-var socketIO = require("socket.io")(mongo);
-var socketID = "";
+//var socketIO = require("socket.io")(mongoConfigs.getDB());
+//var socketID = "";
 var users = [];
 
 app.use(express.static(__dirname+ "/view"));
@@ -92,7 +92,7 @@ app.post('/signup/', function(req,res){
                 res.json({
                     "status": "success",
                     "message": "Signed up successfully!",
-                    "data": req
+                    //"data": req
                 });
             })
         }

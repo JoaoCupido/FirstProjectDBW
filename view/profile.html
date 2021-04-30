@@ -1,10 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="/css/style.css" />
     <link rel="shortcut icon" href="/img/favicon.ico"/>
     <title> Highlight </title>
+    <script>
+        $('form').submit(function () {
+            socket.emit('chat message', $('#m').val());
+            console.log($('#m').val());
+            $('#m').val('');
+            return false;
+        });
+        socket.on('chat message', function (msg) {
+            $('#messages').append('<li style=background-color:#' + hashCode(msg.id) + '>' + (msg.id + ":" + msg.msg) + '</li>');
+            window.scrollTo(0,document.body.scrollHeight);
+        });
+    </script>
 </head>
 <body>
 <div class="logo">
@@ -17,15 +29,20 @@
 </div>
 <div id="Join_Chat">
     <form id="Join_Chat_Form">
-
     </form>
 </div>
 <div id="feed">
-    <form id="feed_form" action="/post/" method="POST">
+
+    <form id="feed_form" action="" >
         <input type="text" placeholder="What are you thinking about?" id="text_feed">
-        <input type="submit" name="Send_img" value="Send Image">
-        <input type="submit" name="Send_messsage" value="Send Post">
+        <input type="submit" id = "Send_img" name="Send_img" value="Send Image">
+        <input type="submit" id="m" name="Send_messsage" value="Send Post">
     </form>
+
+    <div id="live_feed">
+        <ul id="messages"></ul>
+    </div>
+
 </div>
 </body>
 </html>

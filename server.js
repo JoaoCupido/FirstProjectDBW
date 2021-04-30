@@ -64,9 +64,9 @@ app.post('/signin/', function (req, res) {
         }
         else{
             if(req.body.password === uname.password){
-                //res.redirect( '/' );
+                res.redirect( '/profile/' );
                 console.log("ur in");
-                res.sendFile( __dirname + "/view/" + "profile.html" );
+                //res.sendFile( __dirname + "/view/" + "profile.html" );
             }
             else {
                 res.json({
@@ -117,3 +117,7 @@ app.post('/signup/', function(req,res){
     })
 
 });
+
+app.get('/profile/', function (req, res) {
+    res.sendFile( __dirname + "/view/" + "profile.html" );
+})

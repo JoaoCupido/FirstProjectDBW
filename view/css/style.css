@@ -130,7 +130,7 @@ input[type="password"] {
 
 input[type="submit"] {
 	background-color: #006FC4;
-	border: 1px solid #00508D;
+	border: 6px solid #00508D;
 	font-size: 15px;
 	color:#FFFFFF;
 	padding: 5px;
@@ -192,4 +192,18 @@ input[type="text_msg"]{
 	margin-bottom: 3px;
 	margin-top: 3px;
 	outline: none;
+}
+
+#live_feed {
+	text-align: left;
+	margin: 0 auto;
+	margin-bottom: 25px;
+	padding: 10px;
+	background: #fff;
+	height: 300px;
+	width: 530px;
+	border: 1px solid #a7a7a7;
+	overflow: auto;
+	border-radius: 4px;
+	border-bottom: 4px solid #a7a7a7;
 }

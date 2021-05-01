@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/css/style.css" />
+    <link rel="shortcut icon" href="/img/favicon.ico"/>
+    <title> Highlight </title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        window.history.pushState("", "", '/profile');
+        // FONTE: https://stackoverflow.com/questions/39308798/change-url-where-to-render-view-with-express-4
+
+        $(document).ready(function () {
+
+            var socket = io();
+
+            $("#join").click(function () {
+                var name = users.size();
+                if (name !== "") {
+                    socket.emit("join", name);
+                    alert("You entered the chat!!");
+                    //$("#login").remove();
+                } else {
+                    alert("Please insert a valid username");
+                }
+            });
+
+            $('form').submit(function () {
+                socket.emit('chat message', $('#m').val());
+                console.log($('#m').val());
+                $('#m').val('');
+                return false;
+            });
+            socket.on('chat message', function (msg) {
+                $('#messages').append('<li style=background-color:#F5DEB3>' + (msg.id + ":" + msg.msg) + '</li>');
+                window.scrollTo(0, document.body.scrollHeight);
+            });
+
+            socket.on('update', function (msg) {
+                $('#messages').append('<li style="background-color:#000000;color:#FFFFFF">' + (msg) + '</li>');
+                window.scrollTo(0, document.body.scrollHeight);
+            });
+        });
+    </script>
+</head>
+<body>
+    <!-- <img src="/img/logo.png" alt="Image of the Social Network Logo"/>
+    <button href = "profile.hmtl"></button> -->
+    <!-- onclick="window.location.href='profile.ejs';"> -> Ideia: dar refress ou voltar a pagina profile.ejs/// Problema Cannot GET /signin/profile.ejs -->
+    <!-- https://stackoverflow.com/questions/8683528/embed-image-in-a-button-element -->
+    <div class="headerMenu">
+        <div id ="wrapper">
+            <div class="logo">
+                <img src="/img/logo.png" alt="Image of the Highlight Logo"/>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="Join_Chat">
+    <form id="Join_Chat_Form">
+    </form>
+</div>
+<div id="feed">
+
+    <form id="feed_form" action="" >
+        <input type="text" placeholder="What are you thinking about?" id="text_feed">
+        <input type="submit" id = "Send_img" name="Send_img" value="Send Image">
+        <input type="submit" id="m" name="Send_messsage" value="Send Post">
+    </form>
+
+    <div id="friends_list">
+        <p>Friends online:</p>
+        <ul id = "online_friends"></ul>
+    </div>
+
+    <div id = "Chat_Rooms">
+        <p>Available Chat rooms:</p>
+        <ul id="online_chat_rooms"></ul>
+    </div>
+
+    <div id="live_feed">
+        <p>Feed:</p>
+        <ul id="messages"></ul>
+    </div>
+<br>
+</div>
+
+<div class="myavatar">
+    <img id="youravatar" src="" alt="Your Avatar">
+    <script>
+        $("#youravatar").attr("src","<%= avatarlogin %>");
+    </script>
+    <p> <%= userlogin %></p>
+</div>
+
+</body>
+
+</html>

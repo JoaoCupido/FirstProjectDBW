@@ -1,7 +1,8 @@
 <!DOCTYPE HTML>
 <html lang="en">
 	<head>
-		<title>NEW SOCIAL NETWORK SIGNIN</title>
+		<meta charset="UTF-8">
+		<title>Highlight</title>
 		<link rel="stylesheet" type="text/css" href="/css/style.css" />
 		<link rel="shortcut icon" href="/img/favicon.ico"/>
 	</head>
@@ -9,12 +10,12 @@
 	<div class="headerMenu">
 		<div id ="wrapper">
 			<div class="logo">
-				<img src="/img/logo.png" alt="Image of the Social Network Logo"/>
+				<img src="/img/logo.png" alt="Image of the Highlight Logo"/>
 			</div>
 			<div id="menu">
-				<a href="home.html" >Home</a>
-				<a href="signup.html" >Sign Up</a>
-				<a href="signin.html" >Sign In</a>
+				<a href="/" >Home</a>
+				<a href="/signup" >Sign Up</a>
+				<a href="/signin" >Sign In</a>
 			</div>
 		</div>
 	</div>
@@ -23,7 +24,7 @@
 				<tr><br /><br />
 					<td width="100%" valign="top">
 						<form action="/signin/" method="POST">
-							<input type="text" name="username" size="25" placeholder="Username" required /><br /><br />
+							<input type="text" name="username" id="myUsername" size="25" placeholder="Username" required /><br /><br />
 							<input type="password" name="password" id="myInput" size="25" placeholder="Password" required /><br /><br />
 							<input type="checkbox" onclick="myFunction()"> Show Password<br /><br />
 							<script>

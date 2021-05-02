@@ -10,13 +10,10 @@ var app = express();
 app.use(urlencodedParser);
 app.set('views engine', 'ejs');
 
-//var socketIO = require("socket.io")(mongoConfigs.getDB());
-//var socketID = "";
-//var app  = require('express')();
 var http = require('http').Server(app);
 var io   = require('socket.io')(http);
 
-var users = {};
+var people = {};
 
 app.use(express.static(__dirname+ "/views"));
 // FONTE: https://stackoverflow.com/a/56505942
@@ -25,21 +22,21 @@ app.use(express.static(__dirname+ "/views"));
 io.on('connection',function(socket){
     socket.on("join", function(name){
         console.log(name+" joined server");
-        users[socket.id] = name;
+        people[socket.id] = name;
         io.emit("update", name + " has joined the server.");
     });
 
 
     socket.on('chat message',function(msg){
         console.log('message: '+msg);
-        var mensagem = {msg:msg, id:users[socket.id]};
+        var mensagem = {msg:msg, id:people[socket.id]};
         io.emit('chat message', mensagem);
     })
 });
 
 mongoConfigs.connect(function(err){
     if(!err){
-        app.listen(3000,function(){
+        http.listen(3000,function(){
             console.log("Express web server listening on port 3000");
         });
     }

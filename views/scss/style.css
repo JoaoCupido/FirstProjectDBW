@@ -242,23 +242,24 @@ input[type=text_msg] {
   margin: 0 auto 25px;
   padding: 10px;
   background: #e6f7ff;
-  height: 620px;
-  width: 900px;
+  height: 300px;
+  width: 530px;
   border: 1px solid #000000;
   overflow: auto;
   border-radius: 4px;
   border-bottom: 4px solid #000000;
 }
 
-#my_avatar {
+#youravatar {
   position: absolute;
   left: 15px;
-  bottom: 15px;
+  bottom: 105px;
 }
 
 #usernamelogin {
-  position: relative;
-  right: 15px;
+  position: absolute;
+  left: 15px;
+  bottom: 25px;
 }
 
 #feed_form {

@@ -16,17 +16,11 @@
             var socket = io();
 
             $("#join").click(function () {
-                var name = users.size();
-                if (name !== "") {
-                    socket.emit("join", name);
-                    alert("You entered the chat!!");
-                    //$("#login").remove();
-                } else {
-                    alert("Please insert a valid username");
-                }
+                socket.emit("join","<%= userlogin %>");
+                alert("You entered the chat!!");
             });
 
-            $('form').submit(function () {
+            $('#feed_form').submit(function () {
                 socket.emit('chat message', $('#m').val());
                 console.log($('#m').val());
                 $('#m').val('');
@@ -60,17 +54,21 @@
         </div>
     </div>
 </div>
+    <!--
 <div id="Join_Chat">
     <form id="Join_Chat_Form">
     </form>
 </div>
+-->
 <div id="feed">
 
     <br>
 
     <div id = "Chat_Rooms">
         <p>Available Chat rooms:</p>
-        <ul id="online_chat_rooms"></ul>
+        <form id="online_chat_rooms">
+            <input type="button" name="join" id="join" value="GLOBAL CHAT">
+        </form>
     </div>
 
     <div id="live_feed">
@@ -79,9 +77,8 @@
     </div>
 
     <form id="feed_form" action="" >
-        <input type="text" placeholder="What are you thinking about?" id="text_feed">
-        <input type="submit" id = "Send_img" name="Send_img" value="Send Image">
-        <input type="submit" id="m" name="Send_messsage" value="Send Post">
+        <input style="width:90%" id="m"  autocomplete="off" />
+        <button>Send Message</button>
     </form>
 
     <div id="my_avatar">
@@ -89,7 +86,7 @@
         <script>
             $("#youravatar").attr("src","<%= avatarlogin %>");
         </script>
-        <p id="usernamelogin"> <%= userlogin %> </p>
+        <p style="width: 324px" id="usernamelogin"><%= userlogin %></p>
     </div>
 </div>
 

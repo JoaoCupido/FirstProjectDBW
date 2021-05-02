@@ -108,6 +108,7 @@ img.main {
   align-items: center;
   justify-content: center;
   width: 75%;
+  box-shadow: 1px 2px 5px rgba(0%, 0%, 0%, 50%);
 }
 
 span {
@@ -166,6 +167,7 @@ input[type="password"], input[type="text"] {
   margin-top: 3px;
   outline: none;
   border: 1px solid var(--color-white);
+  box-shadow: 1px 2px 5px rgba(0%, 0%, 0%, 40%);
 
   &:hover {
     border: 1px solid var(--color-blue);

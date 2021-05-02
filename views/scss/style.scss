@@ -232,9 +232,9 @@ input[type="text_msg"]{
 
 #Chat_Rooms{
   position: absolute;
-  left: 0px;
-  width: 150px;
-  height: 300px;
+  left: 10px;
+  width: 350px;
+  height: 620px;
   background: #e6f7ff;
   border: 3px solid #000000;
   padding: 10px;
@@ -254,8 +254,7 @@ input[type="text_msg"]{
   position: absolute;
   right: 100px;
   left: 100px;
-  margin: 0 auto;
-  margin-bottom: 25px;
+  margin: 0 auto 25px;
   padding: 10px;
   background: #e6f7ff;
   height: 300px;
@@ -266,20 +265,19 @@ input[type="text_msg"]{
   border-bottom: 4px solid #000000;
 }
 
-.myavatar{
+#my_avatar{
+  position: absolute;
+  left: 15px;
+  bottom: 15px;
+}
+
+#usernamelogin{
   position: relative;
-  height: 300px;
-  width: 300px;
+  right: 15px;
 }
 
-.myavatar img{
+#feed_form{
   position: absolute;
-  left: 0;
-  bottom: 0;
-}
-
-.myavatar p{
-  position: absolute;
-  left: 0;
-  bottom: 0;
+  left: 500px;
+  bottom: 170px;
 }

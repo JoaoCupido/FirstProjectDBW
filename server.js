@@ -116,6 +116,6 @@ app.post('/signup/', function(req,res){
 
 });
 
-app.get('/profile', function (req, res) {
-    // ??
+app.get('/logout', function (req, res) {
+    res.sendFile( __dirname + "/views/" + "home.html" );
 })

@@ -54,6 +54,9 @@
             <div class="logo">
                 <img src="/img/logo.png" alt="Image of the Highlight Logo"/>
             </div>
+            <div id="menu">
+                <a href="/logout" >Logout</a>
+            </div>
         </div>
     </div>
 </div>
@@ -63,16 +66,7 @@
 </div>
 <div id="feed">
 
-    <form id="feed_form" action="" >
-        <input type="text" placeholder="What are you thinking about?" id="text_feed">
-        <input type="submit" id = "Send_img" name="Send_img" value="Send Image">
-        <input type="submit" id="m" name="Send_messsage" value="Send Post">
-    </form>
-
-    <div id="friends_list">
-        <p>Friends online:</p>
-        <ul id = "online_friends"></ul>
-    </div>
+    <br>
 
     <div id = "Chat_Rooms">
         <p>Available Chat rooms:</p>
@@ -83,15 +77,20 @@
         <p>Feed:</p>
         <ul id="messages"></ul>
     </div>
-<br>
-</div>
 
-<div class="myavatar">
-    <img id="youravatar" src="" alt="Your Avatar">
-    <script>
-        $("#youravatar").attr("src","<%= avatarlogin %>");
-    </script>
-    <p> <%= userlogin %></p>
+    <form id="feed_form" action="" >
+        <input type="text" placeholder="What are you thinking about?" id="text_feed">
+        <input type="submit" id = "Send_img" name="Send_img" value="Send Image">
+        <input type="submit" id="m" name="Send_messsage" value="Send Post">
+    </form>
+
+    <div id="my_avatar">
+        <img id="youravatar" src="" alt="Your Avatar">
+        <script>
+            $("#youravatar").attr("src","<%= avatarlogin %>");
+        </script>
+        <p id="usernamelogin"> <%= userlogin %> </p>
+    </div>
 </div>
 
 </body>

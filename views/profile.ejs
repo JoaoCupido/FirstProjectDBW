@@ -16,11 +16,13 @@
             var socket = io();
 
             $("#join").click(function () {
-                $("#feed_form").attr("style","display: block");
-                //$("#titleroom").innerHTML = <%= rooms[i] %>;
-                io.in(<%= rooms[i] %>).emit("join","<%= userlogin %>");
+                var namebutton = this.value.toString();
+                document.getElementById("titleroom").innerHTML = namebutton; //botao que clicou
 
-                socket.emit("join","<%= userlogin %>");
+                $("#feed_form").attr("style","display: block");
+
+                var username = document.getElementById("usernamelogin").innerHTML;
+                socket.emit("join",username,namebutton);
 
                 alert("You entered the group!!");
             });
@@ -33,9 +35,9 @@
                 // show insert text message box
                 $("#feed_form").attr("style","display: block");
                 // get username that login
-                var username = document.getElementById("usernamelogin");
+                var username = document.getElementById("usernamelogin").innerHTML;
                 // go to socket server with username and room name
-                socket.emit("create",username.innerHTML,namegroup);
+                socket.emit("create",username,namegroup);
                 // insert new group as button (ERROR: replaces global chat button)
                 $("#online_chat_rooms:last").append('<input type="button" name="' + namegroup + '" id="join" value="' + namegroup + '">');
 
@@ -55,8 +57,8 @@
                 window.scrollTo(0, document.body.scrollHeight);
             });
 
-            socket.on('update', function (msg) {
-                $('#messages').append('<li style="background-color:#000000;color:#FFFFFF">' + (msg) + '</li>');
+            socket.on('update', function (username) {
+                $('#messages').append('<li style="background-color:#000000;color:#FFFFFF">' + (username) + '</li>');
                 window.scrollTo(0, document.body.scrollHeight);
             });
         });

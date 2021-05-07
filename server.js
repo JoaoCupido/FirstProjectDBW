@@ -28,6 +28,13 @@ io.on('connection',function(socket){
             console.log("new room "+ namegroup + " with username: " + uname);
         })
         socket.join(uname);
+        io.emit("update", uname + " is online in this server.");
+    });
+
+    socket.on('join', function (uname,namegroup) {
+        console.log("entered room "+ namegroup + " with username: " + uname);
+        socket.join(uname);
+        io.emit("update", uname + " is online in this server.");
     });
 
     socket.on("chat message", function(msg,titleroom,username){

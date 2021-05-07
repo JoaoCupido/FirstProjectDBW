@@ -37,7 +37,7 @@
                 // go to socket server with username and room name
                 socket.emit("create",username.innerHTML,namegroup);
                 // insert new group as button (ERROR: replaces global chat button)
-                $("#Chat_Rooms form:last").append('<input type="button" name="' + namegroup + '" id="join" value="' + namegroup + '">');
+                $("#online_chat_rooms:last").append('<input type="button" name="' + namegroup + '" id="join" value="' + namegroup + '">');
 
                 alert("You created a new group!!");
             });

@@ -16,18 +16,42 @@
             var socket = io();
 
             $("#join").click(function () {
+                $("#feed_form").attr("style","display: block");
+                //$("#titleroom").innerHTML = <%= rooms[i] %>;
+                io.in(<%= rooms[i] %>).emit("join","<%= userlogin %>");
+
                 socket.emit("join","<%= userlogin %>");
-                alert("You entered the chat!!");
+
+                alert("You entered the group!!");
+            });
+
+            $("#new_room").click(function () {
+                // nome do group
+                var namegroup = Date.now().toString();
+                // change title room
+                document.getElementById("titleroom").innerHTML = namegroup;
+                // show insert text message box
+                $("#feed_form").attr("style","display: block");
+                // get username that login
+                var username = document.getElementById("usernamelogin");
+                // go to socket server with username and room name
+                socket.emit("create",username.innerHTML,namegroup);
+                // insert new group as button (ERROR: replaces global chat button)
+                $("#Chat_Rooms form:last").append('<input type="button" name="' + namegroup + '" id="join" value="' + namegroup + '">');
+
+                alert("You created a new group!!");
             });
 
             $('#feed_form').submit(function () {
-                socket.emit('chat message', $('#m').val());
+                // go to socket server with room name
+                socket.emit('chat message', $('#m').val(), document.getElementById("titleroom").innerHTML, document.getElementById("usernamelogin").innerHTML);
                 console.log($('#m').val());
+                // reset message
                 $('#m').val('');
                 return false;
             });
-            socket.on('chat message', function (msg) {
-                $('#messages').append('<li style=background-color:#F5DEB3>' + (msg.id + ":" + msg.msg) + '</li>');
+            socket.on('chat message', function (msg, username) {
+                $('#messages').append('<li style=background-color:#F5DEB3>' + (username + ": " + msg) + '</li>');
                 window.scrollTo(0, document.body.scrollHeight);
             });
 
@@ -67,16 +91,21 @@
     <div id = "Chat_Rooms">
         <p>Available Chat rooms:</p>
         <form id="online_chat_rooms">
-            <input type="button" name="join" id="join" value="GLOBAL CHAT">
+            <% for (var i = 0; i < rooms.length ; i++) { %>
+                <input type="button" name="<%= rooms[i] %>" id="join" value="<%= rooms[i] %>">
+            <% } %>
+        </form>
+        <form id="new_room">
+            <input type="button" value="New Group">
         </form>
     </div>
 
     <div id="live_feed">
-        <p>Feed:</p>
+        <p id="titleroom">[Group Name]</p>
         <ul id="messages"></ul>
     </div>
 
-    <form id="feed_form" action="" >
+    <form id="feed_form" action="" style="display: none">
         <input style="width:90%" id="m"  autocomplete="off" /><button>Send Message</button>
     </form>
 

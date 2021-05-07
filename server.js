@@ -15,23 +15,29 @@ var io   = require('socket.io')(http);
 
 var people = {};
 
+//var rooms= {};
+
 app.use(express.static(__dirname+ "/views"));
 // FONTE: https://stackoverflow.com/a/56505942
 // https://stackoverflow.com/questions/48248832/stylesheet-not-loaded-because-of-mime-type
 
 io.on('connection',function(socket){
-    socket.on("join", function(name){
-        console.log(name+" joined server");
-        people[socket.id] = name;
-        io.emit("update", name + " has joined the server.");
+
+    socket.on('create', function (uname,namegroup) {
+        NotesController.addGroup(uname,namegroup, function(){
+            console.log("new room "+ namegroup + " with username: " + uname);
+        })
+        socket.join(uname);
     });
 
-
-    socket.on('chat message',function(msg){
-        console.log('message: '+msg);
-        var mensagem = {msg:msg, id:people[socket.id]};
-        io.emit('chat message', mensagem);
+    socket.on("chat message", function(msg,titleroom,username){
+        //console.log('message: '+msg);
+        NotesController.insertMessage(msg,titleroom,function(){
+            console.log('message: '+msg + " in room: " + titleroom);
+        })
+        io.emit('chat message', msg, username);
     })
+
 });
 
 mongoConfigs.connect(function(err){
@@ -44,43 +50,6 @@ mongoConfigs.connect(function(err){
 
 app.get('/', function (req, res) {
     res.sendFile( __dirname + "/views/" + "home.html" );
-})
-
-app.get('/signin/', function (req, res) {
-    res.sendFile( __dirname + "/views/" + "signin.html" );
-})
-
-app.post('/signin/', function (req, res) {
-    mongoConfigs.getDB().collection("G14").findOne({
-        "username": req.body.username
-    }, function(error, uname){
-        if (uname == null){
-            res.json({
-                "status": "error",
-                "message": "Account does not exist!"
-            });
-        }
-        else{
-            if(req.body.password === uname.password){
-                var userlog = req.body.username;
-                mongoConfigs.getDB().collection("G14").findOne({
-                    "username": userlog
-                }, function(error, uname){
-                    var image = uname.avatar;
-                    res.render( './profile.ejs', {userlogin: userlog, avatarlogin: image} );
-                })
-                //res.redirect( '/profile/');
-                console.log("Login success!");
-                //res.sendFile( __dirname + "/views/" + "profile.ejs" );
-            }
-            else {
-                res.json({
-                    "status": "error",
-                    "message": "Incorrect password!"
-                });
-            }
-        }
-    })
 })
 
 app.get('/signup/', function (req, res) {
@@ -112,6 +81,46 @@ app.post('/signup/', function(req,res){
     })
 
 });
+
+app.get('/signin/', function (req, res) {
+    res.sendFile( __dirname + "/views/" + "signin.html" );
+})
+
+app.post('/signin/', function (req, res) {
+    mongoConfigs.getDB().collection("G14").findOne({
+        "username": req.body.username
+    }, function(error, uname){
+        if (uname == null){
+            res.json({
+                "status": "error",
+                "message": "Account does not exist!"
+            });
+        }
+        else{
+            if(req.body.password === uname.password){
+                var userlog = req.body.username;
+                mongoConfigs.getDB().collection("G14").findOne({
+                    "username": userlog
+                }, function(error, uname){
+                    var image = uname.avatar;
+                    var userrooms = uname.groups;
+                    res.render( './profile.ejs', {userlogin: userlog, avatarlogin: image, rooms: userrooms} );
+                })
+                //res.redirect( '/profile/');
+                console.log("Login success!");
+                //res.sendFile( __dirname + "/views/" + "profile.ejs" );
+            }
+            else {
+                res.json({
+                    "status": "error",
+                    "message": "Incorrect password!"
+                });
+            }
+        }
+    })
+})
+
+
 
 app.get('/logout', function (req, res) {
     res.sendFile( __dirname + "/views/" + "home.html" );

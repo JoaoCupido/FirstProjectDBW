@@ -1,0 +1,38 @@
+.profile-pic-div {
+  width: clamp(450px, 100%, 800px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+}
+
+input[type="password"], input[type="text"] {
+  background-color: white;
+  font-size: 15px;
+  padding: 5px;
+  width: 300px;
+  margin-bottom: 3px;
+  margin-top: 3px;
+  outline: none;
+  border: 1px solid var(--color-white);
+  box-shadow: 1px 2px 5px rgba(0%, 0%, 0%, 40%);
+
+  &:hover {
+    border: 1px solid var(--color-blue);
+  }
+}
+
+input[type="submit"] {
+  background-color: var(--color-blue);
+  border: 6px solid #00508D;
+  font-size: 15px;
+  color: #FFFFFF;
+  padding: 5px;
+  margin-bottom: 3px;
+  margin-top: 3px;
+  border-radius: 7px;
+
+  &:hover {
+    cursor: pointer
+  }
+}

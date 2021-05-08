@@ -1,0 +1,17 @@
+div.main {
+  margin: auto;
+  padding: 1rem;
+  width: 70%;
+  background-color: var(--color-blue);
+  border-radius: 4rem;
+  border: solid 1rem var(--color-dark-blue);
+}
+
+img.main {
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 75%;
+  box-shadow: 1px 2px 5px rgba(0%, 0%, 0%, 50%);
+}

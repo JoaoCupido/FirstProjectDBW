@@ -1,0 +1,39 @@
+p {
+  text-align: center;
+  font-size: 20px;
+  color: var(--color-white);
+  background-color: var(--color-black);
+
+  width: 75%;
+  padding: 2rem 1rem;
+  margin: auto;
+}
+
+h2 {
+  font-family: Arial, Helvetica, Sans-serif, serif;
+  font-size: 30px;
+  padding: 8px;
+  color: var(--color-black);
+  background-color: transparent;
+  text-align: center;
+}
+
+span {
+  --fg: var(--color-yellow);
+  --bg: var(--color-black);
+
+  font-size: inherit;
+  color: var(--fg);
+  background-color: var(--bg);
+
+  &.invert { /* the invert class inverts the colors of the span */
+    --fg: var(--color-black);
+    --bg: var(--color-yellow);
+  }
+
+  &:hover {
+    color: var(--bg);
+    background-color: var(--fg);
+    cursor: default;
+  }
+}

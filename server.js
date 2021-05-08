@@ -45,6 +45,19 @@ io.on('connection',function(socket){
         io.emit('chat message', msg, username);
     })
 
+    socket.on('remove invite', function(uname, invname){
+        NotesController.denyInvite(uname,invname,function(){
+            console.log('denied inv: '+ invname + " in user: " + uname);
+        })
+        io.emit('remove invite', uname, invname);
+    })
+
+    socket.on('accept invite', function(uname, invname){
+        NotesController.acceInvite(uname, invname, function(){
+            console.log('accepted invite ' + invname + ' of receiver: ' + uname);
+        })
+        io.emit('accept invite', uname, invname);
+    })
 });
 
 mongoConfigs.connect(function(err){
@@ -111,7 +124,8 @@ app.post('/signin/', function (req, res) {
                 }, function(error, uname){
                     var image = uname.avatar;
                     var userrooms = uname.groups;
-                    res.render( './profile.ejs', {userlogin: userlog, avatarlogin: image, rooms: userrooms} );
+                    var invites = uname.invites;
+                    res.render( './profile.ejs', {userlogin: userlog, avatarlogin: image, rooms: userrooms, invites: invites} );
                 })
                 //res.redirect( '/profile/');
                 console.log("Login success!");

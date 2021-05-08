@@ -16,11 +16,15 @@
             var socket = io();
 
             $("#join").click(function () {
+                //nome do grupo que cliquei no botao
                 var namebutton = this.value.toString();
-                document.getElementById("titleroom").innerHTML = namebutton; //botao que clicou
+                //mudar nome do [Grupo Name]
+                document.getElementById("titleroom").innerHTML = namebutton;
 
+                //show text message
                 $("#feed_form").attr("style","display: block");
 
+                //get username login
                 var username = document.getElementById("usernamelogin").innerHTML;
                 socket.emit("join",username,namebutton);
 
@@ -38,7 +42,7 @@
                 var username = document.getElementById("usernamelogin").innerHTML;
                 // go to socket server with username and room name
                 socket.emit("create",username,namegroup);
-                // insert new group as button (ERROR: replaces global chat button)
+                // insert new group as button
                 $("#online_chat_rooms:last").append('<input type="button" name="' + namegroup + '" id="join" value="' + namegroup + '">');
 
                 alert("You created a new group!!");
@@ -61,6 +65,28 @@
                 $('#messages').append('<li style="background-color:#000000;color:#FFFFFF">' + (username) + '</li>');
                 window.scrollTo(0, document.body.scrollHeight);
             });
+
+            $('.buttonn').click(function(){
+                var uname = document.getElementById("usernamelogin").innerHTML;
+                var deniedinv = this.id;
+                //ERROR: not removing in mongodb NOR html page
+                document.getElementById(deniedinv).remove();
+
+                socket.emit('remove invite', uname, deniedinv);
+            })
+
+            $('.buttony').click(function(){
+                var uname = document.getElementById("usernamelogin").innerHTML;
+                var acceptinv = this.id;
+
+                // insert new group as button
+                $("#online_chat_rooms:last").append('<input type="button" name="' + acceptinv + '" id="join" value="' + acceptinv + '">');
+
+                //ERROR: not removing in mongodb NOR html page
+                document.getElementById(acceptinv).remove();
+
+                socket.emit('accept invite', uname, acceptinv);
+            })
         });
     </script>
 </head>
@@ -105,6 +131,18 @@
     <div id="live_feed">
         <p id="titleroom">[Group Name]</p>
         <ul id="messages"></ul>
+    </div>
+
+    <div id = "div_invitations">
+        <p>Invitation Chat rooms:</p>
+        <form id="invitations_chat_rooms">
+            <% for (var k = 0; k < invites.length ; k++) { %>
+                <span id="<%= invites[k][1] %>"><%= invites[k][1] %></span>
+                <input type="button" id="<%= invites[k][1] %>" class="buttony" value="Accept" />
+                <input type="button" id="<%= invites[k][1] %>" class="buttonn" value="Decline" />
+            <% } %>
+        </form>
+
     </div>
 
     <form id="feed_form" action="" style="display: none">

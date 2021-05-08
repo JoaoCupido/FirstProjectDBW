@@ -16,31 +16,77 @@
             var socket = io();
 
             $("#join").click(function () {
-                var name = users.size();
-                if (name !== "") {
-                    socket.emit("join", name);
-                    alert("You entered the chat!!");
-                    //$("#login").remove();
-                } else {
-                    alert("Please insert a valid username");
-                }
+                //nome do grupo que cliquei no botao
+                var namebutton = this.value.toString();
+                //mudar nome do [Grupo Name]
+                document.getElementById("titleroom").innerHTML = namebutton;
+
+                //show text message
+                $("#feed_form").attr("style","display: block");
+
+                //get username login
+                var username = document.getElementById("usernamelogin").innerHTML;
+                socket.emit("join",username,namebutton);
+
+                alert("You entered the group!!");
             });
 
-            $('form').submit(function () {
-                socket.emit('chat message', $('#m').val());
+            $("#new_room").click(function () {
+                // nome do group
+                var namegroup = Date.now().toString();
+                // change title room
+                document.getElementById("titleroom").innerHTML = namegroup;
+                // show insert text message box
+                $("#feed_form").attr("style","display: block");
+                // get username that login
+                var username = document.getElementById("usernamelogin").innerHTML;
+                // go to socket server with username and room name
+                socket.emit("create",username,namegroup);
+                // insert new group as button
+                $("#online_chat_rooms:last").append('<input type="button" name="' + namegroup + '" id="join" value="' + namegroup + '">');
+
+                alert("You created a new group!!");
+            });
+
+            $('#feed_form').submit(function () {
+                // go to socket server with room name
+                socket.emit('chat message', $('#m').val(), document.getElementById("titleroom").innerHTML, document.getElementById("usernamelogin").innerHTML);
                 console.log($('#m').val());
+                // reset message
                 $('#m').val('');
                 return false;
             });
-            socket.on('chat message', function (msg) {
-                $('#messages').append('<li style=background-color:#F5DEB3>' + (msg.id + ":" + msg.msg) + '</li>');
+            socket.on('chat message', function (msg, username) {
+                $('#messages').append('<li style=background-color:#F5DEB3>' + (username + ": " + msg) + '</li>');
                 window.scrollTo(0, document.body.scrollHeight);
             });
 
-            socket.on('update', function (msg) {
-                $('#messages').append('<li style="background-color:#000000;color:#FFFFFF">' + (msg) + '</li>');
+            socket.on('update', function (username) {
+                $('#messages').append('<li style="background-color:#000000;color:#FFFFFF">' + (username) + '</li>');
                 window.scrollTo(0, document.body.scrollHeight);
             });
+
+            $('.buttonn').click(function(){
+                var uname = document.getElementById("usernamelogin").innerHTML;
+                var deniedinv = this.id;
+                //ERROR: not removing in mongodb NOR html page
+                document.getElementById(deniedinv).remove();
+
+                socket.emit('remove invite', uname, deniedinv);
+            })
+
+            $('.buttony').click(function(){
+                var uname = document.getElementById("usernamelogin").innerHTML;
+                var acceptinv = this.id;
+
+                // insert new group as button
+                $("#online_chat_rooms:last").append('<input type="button" name="' + acceptinv + '" id="join" value="' + acceptinv + '">');
+
+                //ERROR: not removing in mongodb NOR html page
+                document.getElementById(acceptinv).remove();
+
+                socket.emit('accept invite', uname, acceptinv);
+            })
         });
     </script>
 </head>
@@ -60,28 +106,47 @@
         </div>
     </div>
 </div>
+    <!--
 <div id="Join_Chat">
     <form id="Join_Chat_Form">
     </form>
 </div>
+-->
 <div id="feed">
 
     <br>
 
     <div id = "Chat_Rooms">
         <p>Available Chat rooms:</p>
-        <ul id="online_chat_rooms"></ul>
+        <form id="online_chat_rooms">
+            <% for (var i = 0; i < rooms.length ; i++) { %>
+                <input type="button" name="<%= rooms[i] %>" id="join" value="<%= rooms[i] %>">
+            <% } %>
+        </form>
+        <form id="new_room">
+            <input type="button" value="New Group">
+        </form>
     </div>
 
     <div id="live_feed">
-        <p>Feed:</p>
+        <p id="titleroom">[Group Name]</p>
         <ul id="messages"></ul>
     </div>
 
-    <form id="feed_form" action="" >
-        <input type="text" placeholder="What are you thinking about?" id="text_feed">
-        <input type="submit" id = "Send_img" name="Send_img" value="Send Image">
-        <input type="submit" id="m" name="Send_messsage" value="Send Post">
+    <div id = "div_invitations">
+        <p>Invitation Chat rooms:</p>
+        <form id="invitations_chat_rooms">
+            <% for (var k = 0; k < invites.length ; k++) { %>
+                <span id="<%= invites[k][1] %>"><%= invites[k][1] %></span>
+                <input type="button" id="<%= invites[k][1] %>" class="buttony" value="Accept" />
+                <input type="button" id="<%= invites[k][1] %>" class="buttonn" value="Decline" />
+            <% } %>
+        </form>
+
+    </div>
+
+    <form id="feed_form" action="" style="display: none">
+        <input style="width:90%" id="m"  autocomplete="off" /><button>Send Message</button>
     </form>
 
     <div id="my_avatar">
@@ -89,7 +154,7 @@
         <script>
             $("#youravatar").attr("src","<%= avatarlogin %>");
         </script>
-        <p id="usernamelogin"> <%= userlogin %> </p>
+        <p style="width: 324px" id="usernamelogin"><%= userlogin %></p>
     </div>
 </div>
 

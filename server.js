@@ -54,30 +54,24 @@ io.on('connection',function(socket){
     })
 
     socket.on('isadmin',function(uname, roomname){
-        var isAdmin = false;
         mongoConfigs.getDB().collection("chats").findOne({
+            "name": [roomname],
             "admin": uname
         }, function(error, unamee){
             if (unamee !== null){
                 for(var i = 0; i < unamee.name.length; i++){
                     if(unamee.name[i] === roomname){
-                        isAdmin = true;
+                        io.emit('adminprop', uname, roomname);
                         break;
                     }
                 }
-                if(isAdmin){
-                    console.log('isadmin');
-                    io.emit('adminprop', uname, roomname);
-                }
-                else{
-                    console.log('isnotadmin');
-                    io.emit('removeadminprop', uname, roomname);
-                }
             }
-            else{
-                //ERRO: não devia ir para este quando é admin
-                console.log('nope');
-            }
+        })
+    })
+
+    socket.on('send invite', function(receiver, roomname){
+        NotesController.sendInvite(receiver,roomname,function(){
+            console.log('sended invite ' + roomname + ' to receiver: ' + receiver);
         })
     })
 });

@@ -27,6 +27,9 @@
                 //get username login
                 var username = document.getElementById("usernamelogin").innerHTML;
                 socket.emit("join",username,namebutton);
+
+                //add admin properties (edit name, send invites, etc)
+                socket.emit('isadmin',username, namebutton);
             });
 
             $("#new_room").click(function () {
@@ -48,6 +51,8 @@
                 // insert new group as button
                 $("#online_chat_rooms:last").append('<input type="button" name="' + namegroup + '" class="join" value="' + namegroup + '">');
 
+                //add admin properties (edit name, send invites, etc)
+                socket.emit('isadmin',username, namegroup);
             });
 
             $('#feed_form').submit(function () {
@@ -58,26 +63,20 @@
                 $('#m').val('');
                 return false;
             });
-            socket.on('chat message', function (msg, username) {
-                $('#messages').append('<li style=background-color:#F5DEB3>' + (username + ": " + msg) + '</li>');
-                window.scrollTo(0, document.body.scrollHeight);
-            });
-
-            socket.on('update', function (username, roomname) {
-                $('#messages').append('<li style="background-color:#000000;color:#FFFFFF">' + (username) + '</li>');
-                window.scrollTo(0, document.body.scrollHeight);
-                //add admin properties (edit name, send invites, etc)
-                socket.emit('isadmin',username, roomname);
-            });
 
             $('.buttonn').click(function(){
                 var uname = document.getElementById("usernamelogin").innerHTML;
                 var deniedinv = this.id;
 
-                var contentToRemove = document.querySelectorAll('#' + deniedinv);
+                //ERRO: Não remove todos os que tem certo id ao mesmo tempo
+                var contentToRemove = document.querySelectorAll("[id=deniedinv]");
                 $(contentToRemove).remove();
+                /*
+                $("#" + deniedinv).each(function() {
+                    $(this).remove();
+                });
                 //FONTE: https://stackoverflow.com/questions/4223141/using-jquery-to-delete-all-elements-with-a-given-id
-
+                */
                 socket.emit('remove invite', uname, deniedinv);
             })
 
@@ -88,23 +87,51 @@
                 // insert new group as button
                 $("#online_chat_rooms:last").append('<input type="button" name="' + acceptinv + '" id="join" value="' + acceptinv + '">');
 
-                var contentToRemove = document.querySelectorAll('#' + acceptinv);
+                //ERRO: Não remove todos os que tem certo id ao mesmo tempo
+                var contentToRemove = document.querySelectorAll("[id=acceptinv]");
                 $(contentToRemove).remove();
+                /*
+                $("#" + acceptinv).each(function() {
+                    $(this).remove();
+                });
                 //FONTE: https://stackoverflow.com/questions/4223141/using-jquery-to-delete-all-elements-with-a-given-id
 
+                 */
                 socket.emit('accept invite', uname, acceptinv);
             })
 
-            socket.on('removeadminprop', function(uname, roomname){
-                //adicionar properties
-                $("#editname").remove();
-                $("#adduser").remove();
-            })
+            socket.on('chat message', function (msg, username) {
+                $('#messages').append('<li style=background-color:#F5DEB3>' + (username + ": " + msg) + '</li>');
+                window.scrollTo(0, document.body.scrollHeight);
+            });
+
+            socket.on('update', function (username, roomname) {
+                $('#messages').append('<li style="background-color:#000000;color:#FFFFFF">' + (username) + '</li>');
+                window.scrollTo(0, document.body.scrollHeight);
+            });
 
             socket.on('adminprop', function(uname, roomname){
-                //remove properties
-                $("#titleroom").append('<input type="image" src="/img/edit.png" id="editname" alt="Edit Group Name"/>');
-                $("#titleroom").append('<input type="image" src="/img/add_user.png" id="adduser" alt="Add User to Group"/>');
+                //add properties
+                $("#addbuttons").append('<button id="editname"><img src="/img/edit.png" alt="Edit Group Name"/></button>');
+                $("#addbuttons").append('<button id="adduser"><img src="/img/add_user.png" alt="Add User to Group"/></button>');
+            })
+
+            $("#addbuttons").on('click','#editname',function(){
+                //alert to insert name (can happen to be null)
+                var newroomname = prompt("Please enter new room name", "");
+
+                // change title room
+                document.getElementById("titleroom").innerHTML = newroomname;
+            })
+
+
+            $("#addbuttons").on('click','#adduser',function(){
+                //alert to insert name (can happen to be null)
+                var receiver = prompt("Please enter username to send invite", "");
+
+                var roomname = document.getElementById("titleroom").innerHTML;
+
+                socket.emit('send invite', receiver, roomname);
             })
         });
     </script>
@@ -149,6 +176,7 @@
 
     <div id="live_feed">
         <p id="titleroom">[Group Name]</p>
+        <p id="addbuttons"></p>
         <ul id="messages"></ul>
     </div>
 

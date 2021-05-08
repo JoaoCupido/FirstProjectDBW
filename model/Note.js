@@ -58,7 +58,6 @@ function addInvite(receiver, room, callback){
 function removeInvite(receiver, room, callback){
     var db = mongoConfigs.getDB();
 
-    //ERROR: does not the intended (remove invite from user) (precisa de teste)
     db.collection("G14").update({username: receiver}, {$pull: {invites: room}},function(err, result){
         callback(err, result);
     })
@@ -67,15 +66,12 @@ function removeInvite(receiver, room, callback){
 //accepting invite
 function acceptInvite(receiver, room, callback){
     var db = mongoConfigs.getDB();
-    //ERROR: does not the intended (remove invite from user) (precisa de teste)
     db.collection("G14").update({username: receiver}, {$pull: {invites: room}},function(err, result){
         callback(err, result);
     })
-    //funciona
     db.collection("G14").findOneAndUpdate({username: receiver},{$push: {groups: room}}, function(err, result){
         callback(err, result);
     });
-    //esta parte funciona
     db.collection("chats").findOneAndUpdate({name: room},{$push: {users: receiver}},function(err, result){
         callback(err,result);
     })

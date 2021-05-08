@@ -15,7 +15,7 @@
 
             var socket = io();
 
-            $("#join").click(function () {
+            $(".join").click(function () {
                 //nome do grupo que cliquei no botao
                 var namebutton = this.value.toString();
                 //mudar nome do [Grupo Name]
@@ -27,25 +27,27 @@
                 //get username login
                 var username = document.getElementById("usernamelogin").innerHTML;
                 socket.emit("join",username,namebutton);
-
-                alert("You entered the group!!");
             });
 
             $("#new_room").click(function () {
                 // nome do group
                 var namegroup = Date.now().toString();
+
                 // change title room
                 document.getElementById("titleroom").innerHTML = namegroup;
+
                 // show insert text message box
                 $("#feed_form").attr("style","display: block");
+
                 // get username that login
                 var username = document.getElementById("usernamelogin").innerHTML;
+
                 // go to socket server with username and room name
                 socket.emit("create",username,namegroup);
-                // insert new group as button
-                $("#online_chat_rooms:last").append('<input type="button" name="' + namegroup + '" id="join" value="' + namegroup + '">');
 
-                alert("You created a new group!!");
+                // insert new group as button
+                $("#online_chat_rooms:last").append('<input type="button" name="' + namegroup + '" class="join" value="' + namegroup + '">');
+
             });
 
             $('#feed_form').submit(function () {
@@ -61,9 +63,11 @@
                 window.scrollTo(0, document.body.scrollHeight);
             });
 
-            socket.on('update', function (username) {
+            socket.on('update', function (username, roomname) {
                 $('#messages').append('<li style="background-color:#000000;color:#FFFFFF">' + (username) + '</li>');
                 window.scrollTo(0, document.body.scrollHeight);
+                //add admin properties (edit name, send invites, etc)
+                socket.emit('isadmin',username, roomname);
             });
 
             $('.buttonn').click(function(){
@@ -89,6 +93,18 @@
                 //FONTE: https://stackoverflow.com/questions/4223141/using-jquery-to-delete-all-elements-with-a-given-id
 
                 socket.emit('accept invite', uname, acceptinv);
+            })
+
+            socket.on('removeadminprop', function(uname, roomname){
+                //adicionar properties
+                $("#editname").remove();
+                $("#adduser").remove();
+            })
+
+            socket.on('adminprop', function(uname, roomname){
+                //remove properties
+                $("#titleroom").append('<input type="image" src="/img/edit.png" id="editname" alt="Edit Group Name"/>');
+                $("#titleroom").append('<input type="image" src="/img/add_user.png" id="adduser" alt="Add User to Group"/>');
             })
         });
     </script>
@@ -123,7 +139,7 @@
         <p>Available Chat rooms:</p>
         <form id="online_chat_rooms">
             <% for (var i = 0; i < rooms.length ; i++) { %>
-                <input type="button" name="<%= rooms[i] %>" id="join" value="<%= rooms[i] %>">
+                <input type="button" name="<%= rooms[i] %>" class="join" value="<%= rooms[i] %>">
             <% } %>
         </form>
         <form id="new_room">

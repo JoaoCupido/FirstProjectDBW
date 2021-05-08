@@ -2,7 +2,6 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var mongoConfigs = require('./model/mongoConfigs');
 var NotesController = require('./controller/NotesController');
-var url = require('url');
 
 var urlencodedParser = bodyParser.urlencoded({extended:false});
 var app = express();
@@ -12,10 +11,6 @@ app.set('views engine', 'ejs');
 
 var http = require('http').Server(app);
 var io   = require('socket.io')(http);
-
-var people = {};
-
-//var rooms= {};
 
 app.use(express.static(__dirname+ "/views"));
 // FONTE: https://stackoverflow.com/a/56505942
@@ -28,17 +23,16 @@ io.on('connection',function(socket){
             console.log("new room "+ namegroup + " with username: " + uname);
         })
         socket.join(uname);
-        io.emit("update", uname + " is online in this server.");
+        io.emit("update", uname + " is online in this server.", namegroup);
     });
 
     socket.on('join', function (uname,namegroup) {
         console.log("entered room "+ namegroup + " with username: " + uname);
         socket.join(uname);
-        io.emit("update", uname + " is online in this server.");
+        io.emit("update", uname + " is online in server " + namegroup + ".", namegroup);
     });
 
     socket.on("chat message", function(msg,titleroom,username){
-        //console.log('message: '+msg);
         NotesController.insertMessage(msg,titleroom,function(){
             console.log('message: '+msg + " in room: " + titleroom);
         })
@@ -57,6 +51,34 @@ io.on('connection',function(socket){
             console.log('accepted invite ' + invname + ' of receiver: ' + uname);
         })
         io.emit('accept invite', uname, invname);
+    })
+
+    socket.on('isadmin',function(uname, roomname){
+        var isAdmin = false;
+        mongoConfigs.getDB().collection("chats").findOne({
+            "admin": uname
+        }, function(error, unamee){
+            if (unamee !== null){
+                for(var i = 0; i < unamee.name.length; i++){
+                    if(unamee.name[i] === roomname){
+                        isAdmin = true;
+                        break;
+                    }
+                }
+                if(isAdmin){
+                    console.log('isadmin');
+                    io.emit('adminprop', uname, roomname);
+                }
+                else{
+                    console.log('isnotadmin');
+                    io.emit('removeadminprop', uname, roomname);
+                }
+            }
+            else{
+                //ERRO: não devia ir para este quando é admin
+                console.log('nope');
+            }
+        })
     })
 });
 

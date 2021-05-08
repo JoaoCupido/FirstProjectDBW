@@ -16,8 +16,8 @@ function insertMessage(mes,room,callback){
     Note.addMessage(mes,room,callback);
 }
 
-function sendInvite(sender, receiver, roomname, callback){
-    Note.addInvite(sender, receiver, roomname, callback);
+function sendInvite(receiver, roomname, callback){
+    Note.addInvite(receiver, roomname, callback);
 }
 
 function denyInvite(receiver, roomname, callback){

@@ -47,18 +47,19 @@ function addMessage(mes, roomname, callback){
 }
 
 //sending invite
-function addInvite(sender, receiver, room, callback){
+function addInvite(receiver, room, callback){
     var db = mongoConfigs.getDB();
-    db.collection("G14").findOneAndUpdate({username: receiver}, {$push: {invites: [sender, room]}},function(err, result){
+    db.collection("G14").findOneAndUpdate({username: receiver}, {$push: {invites: room}},function(err, result){
         callback(err, result);
     })
 }
 
-//negating or accepting invite
+//negating invite
 function removeInvite(receiver, room, callback){
     var db = mongoConfigs.getDB();
+
     //ERROR: does not the intended (remove invite from user) (precisa de teste)
-    db.collection("G14").findOneAndUpdate({username: receiver}, {$pull: {invites: {$arrayElemAt: [room, 1]}}},function(err, result){
+    db.collection("G14").update({username: receiver}, {$pull: {invites: room}},function(err, result){
         callback(err, result);
     })
 }
@@ -67,10 +68,14 @@ function removeInvite(receiver, room, callback){
 function acceptInvite(receiver, room, callback){
     var db = mongoConfigs.getDB();
     //ERROR: does not the intended (remove invite from user) (precisa de teste)
-    db.collection("G14").findOne({username: receiver})
-    db.collection("G14").findOneAndUpdate({username: receiver, invites: {$arrayElemAt: [room, 1]}}, {$pull: {invites: {$arrayElemAt: [room, 1]}}},function(err, result){
+    db.collection("G14").update({username: receiver}, {$pull: {invites: room}},function(err, result){
         callback(err, result);
     })
+    //funciona
+    db.collection("G14").findOneAndUpdate({username: receiver},{$push: {groups: room}}, function(err, result){
+        callback(err, result);
+    });
+    //esta parte funciona
     db.collection("chats").findOneAndUpdate({name: room},{$push: {users: receiver}},function(err, result){
         callback(err,result);
     })

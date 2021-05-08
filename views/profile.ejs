@@ -69,8 +69,10 @@
             $('.buttonn').click(function(){
                 var uname = document.getElementById("usernamelogin").innerHTML;
                 var deniedinv = this.id;
-                //ERROR: not removing in mongodb NOR html page
-                document.getElementById(deniedinv).remove();
+
+                var contentToRemove = document.querySelectorAll('#' + deniedinv);
+                $(contentToRemove).remove();
+                //FONTE: https://stackoverflow.com/questions/4223141/using-jquery-to-delete-all-elements-with-a-given-id
 
                 socket.emit('remove invite', uname, deniedinv);
             })
@@ -82,8 +84,9 @@
                 // insert new group as button
                 $("#online_chat_rooms:last").append('<input type="button" name="' + acceptinv + '" id="join" value="' + acceptinv + '">');
 
-                //ERROR: not removing in mongodb NOR html page
-                document.getElementById(acceptinv).remove();
+                var contentToRemove = document.querySelectorAll('#' + acceptinv);
+                $(contentToRemove).remove();
+                //FONTE: https://stackoverflow.com/questions/4223141/using-jquery-to-delete-all-elements-with-a-given-id
 
                 socket.emit('accept invite', uname, acceptinv);
             })
@@ -137,9 +140,9 @@
         <p>Invitation Chat rooms:</p>
         <form id="invitations_chat_rooms">
             <% for (var k = 0; k < invites.length ; k++) { %>
-                <span id="<%= invites[k][1] %>"><%= invites[k][1] %></span>
-                <input type="button" id="<%= invites[k][1] %>" class="buttony" value="Accept" />
-                <input type="button" id="<%= invites[k][1] %>" class="buttonn" value="Decline" />
+                <span id="<%= invites[k] %>"><%= invites[k] %></span>
+                <input type="button" id="<%= invites[k] %>" class="buttony" value="Accept" />
+                <input type="button" id="<%= invites[k] %>" class="buttonn" value="Decline" />
             <% } %>
         </form>
 

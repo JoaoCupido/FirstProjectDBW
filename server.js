@@ -74,7 +74,6 @@ io.on('connection',function(socket){
         NotesController.sendInvite(receiver,roomname,function(){
             console.log('sended invite ' + roomname + ' to receiver: ' + receiver);
         })
-        io.emit('updateinvites',receiver,roomname);
     })
     /*
     socket.on('isroomnameunique', function(newroomname,oldroomname){

@@ -15,7 +15,7 @@
 
             var socket = io();
 
-            $(".join").click(function () {
+            $(".join").on('click',function () {
                 //nome do grupo que cliquei no botao
                 var namebutton = this.value.toString();
                 //mudar nome do [Grupo Name]
@@ -48,8 +48,6 @@
                 // go to socket server with username and room name
                 socket.emit("create",username,namegroup);
 
-                // insert new group as button
-                $("#online_chat_rooms:last").append('<input type="button" name="' + namegroup + '" class="join" value="' + namegroup + '">');
 
                 //add admin properties (edit name, send invites, etc)
                 socket.emit('isadmin',username, namegroup);
@@ -64,32 +62,6 @@
                 return false;
             });
 
-            $('.buttonn').click(function(){
-                var uname = document.getElementById("usernamelogin").innerHTML;
-                var deniedinv = this.id;
-
-                // remove roomname, buttony and buttonn
-                $('#' + deniedinv).remove();
-                $('#' + deniedinv).remove();
-                $('#' + deniedinv).remove();
-
-                socket.emit('remove invite', uname, deniedinv);
-            })
-
-            $('.buttony').click(function(){
-                var uname = document.getElementById("usernamelogin").innerHTML;
-                var acceptinv = this.id;
-
-                // insert new group as button
-                $("#online_chat_rooms:last").append('<input type="button" name="' + acceptinv + '" id="join" value="' + acceptinv + '">');
-
-                // remove roomname, buttony and buttonn
-                $('#' + acceptinv).remove();
-                $('#' + acceptinv).remove();
-                $('#' + acceptinv).remove();
-
-                socket.emit('accept invite', uname, acceptinv);
-            })
 
             socket.on('chat message', function (msg, username) {
                 $('#messages').append('<li style=background-color:#F5DEB3>' + (username + ": " + msg) + '</li>');
@@ -123,16 +95,7 @@
                 }
             })
 
-            socket.on('updateinvites',function(receiver,roomname){
-                var usernameonpage = document.getElementById("usernamelogin").innerHTML;
-                if(usernameonpage === receiver){
-                    // insert new invite as button
-                    $("#invitations_chat_rooms:last").append('<span id="' + roomname + '">' + roomname + '</span>');
-                    $("#invitations_chat_rooms:last").append('<input type="button" id="' + roomname + '" class="buttony" value="Accept" />');
-                    $("#invitations_chat_rooms:last").append('<input type="button" id="' + roomname + '" class="buttonn" value="Decline" />');
-                }
-            })
-
+            //INCOMPLETO
             $("#addbuttons").on('click','#editname',function(){
                 //alert to insert name (can happen to be null)
                 var newroomname = prompt("Please enter new room name", "");
@@ -172,9 +135,6 @@
             $(".buttony").on('click',function(){
                 var uname = document.getElementById("usernamelogin").innerHTML;
                 var acceptinv = this.id;
-
-                // insert new group as button
-                $("#online_chat_rooms:last").append('<input type="button" name="' + acceptinv + '" id="join" value="' + acceptinv + '">');
 
                 // remove roomname, buttony and buttonn
                 $('#' + acceptinv).remove();

@@ -54,17 +54,18 @@ io.on('connection',function(socket){
     })
 
     socket.on('isadmin',function(uname, roomname){
+        var isAdmin = false;
         mongoConfigs.getDB().collection("chats").findOne({
-            "name": [roomname],
+            "roomname": roomname,
             "admin": uname
         }, function(error, unamee){
             if (unamee !== null){
-                for(var i = 0; i < unamee.name.length; i++){
-                    if(unamee.name[i] === roomname){
-                        io.emit('adminprop', uname, roomname);
-                        break;
-                    }
-                }
+                console.log("adminprop");
+                io.emit('adminprop', uname, roomname);
+            }
+            else{
+                console.log("removeadminprop");
+                io.emit('removeadminprop', uname, roomname);
             }
         })
     })
@@ -73,7 +74,15 @@ io.on('connection',function(socket){
         NotesController.sendInvite(receiver,roomname,function(){
             console.log('sended invite ' + roomname + ' to receiver: ' + receiver);
         })
+        io.emit('updateinvites',receiver,roomname);
     })
+    /*
+    socket.on('isroomnameunique', function(newroomname,oldroomname){
+        mongoConfigs.getDB().collection("chats").findOne({
+            ""
+        }
+    })
+     */
 });
 
 mongoConfigs.connect(function(err){

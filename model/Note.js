@@ -19,7 +19,7 @@ function insertGroup(creator, namegroupe, callback){
     var namegroup = [namegroupe];
     var people = [creator];
     var messages = [];
-    db.collection('chats').insertOne({name:namegroup,admin:creator,users:people,messages:messages},function(err,result){
+    db.collection('chats').insertOne({name:namegroup,admin:creator,users:people,messages:messages,roomname: namegroupe},function(err,result){
         callback(err,result);
     });
     db.collection('G14').findOneAndUpdate({username: creator},{$push: {groups: namegroupe}},function(err,result){
@@ -33,7 +33,8 @@ function removeGroup(participant, roomname, callback){
     db.collection('G14').findOneAndUpdate({username: participant},{$pull: {groups: roomname}},function(err,result){
         callback(err,result);
     });
-    db.collection('chats').findOneAndUpdate({name: roomname},{$pull: {users: participant}},function(err,result){
+    //isto nao elimina o grupo inteiro
+    db.collection('chats').findOneAndUpdate({roomname: roomname},{$pull: {users: participant}},function(err,result){
         callback(err,result);
     });
 }
@@ -41,7 +42,7 @@ function removeGroup(participant, roomname, callback){
 //send message
 function addMessage(mes, roomname, callback){
     var db = mongoConfigs.getDB();
-    db.collection('chats').findOneAndUpdate({name: roomname},{$push: {messages:mes}},function(err, result){
+    db.collection('chats').findOneAndUpdate({roomname: roomname},{$push: {messages:mes}},function(err, result){
         callback(err,result);
     });
 }
@@ -72,7 +73,7 @@ function acceptInvite(receiver, room, callback){
     db.collection("G14").findOneAndUpdate({username: receiver},{$push: {groups: room}}, function(err, result){
         callback(err, result);
     });
-    db.collection("chats").findOneAndUpdate({name: room},{$push: {users: receiver}},function(err, result){
+    db.collection("chats").findOneAndUpdate({roomname: room},{$push: {users: receiver}},function(err, result){
         callback(err,result);
     })
 }

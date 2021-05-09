@@ -8,6 +8,7 @@ function addGroup(user, namegroup, callback){
     Note.insertGroup(user, namegroup, callback);
 }
 
+//unused
 function leaveGroup(req,callback){
     Note.removeGroup(req.body.username, req.body.group,callback);
 }

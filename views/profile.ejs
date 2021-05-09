@@ -68,15 +68,11 @@
                 var uname = document.getElementById("usernamelogin").innerHTML;
                 var deniedinv = this.id;
 
-                //ERRO: Não remove todos os que tem certo id ao mesmo tempo
-                var contentToRemove = document.querySelectorAll("[id=deniedinv]");
-                $(contentToRemove).remove();
-                /*
-                $("#" + deniedinv).each(function() {
-                    $(this).remove();
-                });
-                //FONTE: https://stackoverflow.com/questions/4223141/using-jquery-to-delete-all-elements-with-a-given-id
-                */
+                // remove roomname, buttony and buttonn
+                $('#' + deniedinv).remove();
+                $('#' + deniedinv).remove();
+                $('#' + deniedinv).remove();
+
                 socket.emit('remove invite', uname, deniedinv);
             })
 
@@ -87,16 +83,11 @@
                 // insert new group as button
                 $("#online_chat_rooms:last").append('<input type="button" name="' + acceptinv + '" id="join" value="' + acceptinv + '">');
 
-                //ERRO: Não remove todos os que tem certo id ao mesmo tempo
-                var contentToRemove = document.querySelectorAll("[id=acceptinv]");
-                $(contentToRemove).remove();
-                /*
-                $("#" + acceptinv).each(function() {
-                    $(this).remove();
-                });
-                //FONTE: https://stackoverflow.com/questions/4223141/using-jquery-to-delete-all-elements-with-a-given-id
+                // remove roomname, buttony and buttonn
+                $('#' + acceptinv).remove();
+                $('#' + acceptinv).remove();
+                $('#' + acceptinv).remove();
 
-                 */
                 socket.emit('accept invite', uname, acceptinv);
             })
 

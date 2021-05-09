@@ -42,7 +42,7 @@ function removeGroup(participant, roomname, callback){
 //send message
 function addMessage(mes, roomname, callback){
     var db = mongoConfigs.getDB();
-    db.collection('chats').findOneAndUpdate({roomname: roomname},{$push: {messages:mes}},function(err, result){
+    db.collection('chats').findOneAndUpdate({roomname: roomname},{$push: {messages:mes, replies: []}},function(err, result){
         callback(err,result);
     });
 }

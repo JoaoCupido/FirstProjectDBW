@@ -6,7 +6,7 @@ var NotesController = require('./controller/NotesController');
 var urlencodedParser = bodyParser.urlencoded({extended:false});
 var app = express();
 
-app.use(urlencodedParser);
+app.use(urlencodedParser);// vai buscar a foto, nome e pass do usuario!
 app.set('views engine', 'ejs');
 
 var http = require('http').Server(app);
@@ -128,6 +128,10 @@ app.post('/signup/', function(req,res){
 
 app.get('/signin/', function (req, res) {
     res.sendFile( __dirname + "/views/" + "signin.html" );
+})
+
+app.get('/about/', function (req, res) {
+    res.sendFile( __dirname + "/views/" + "about.html" );
 })
 
 app.post('/signin/', function (req, res) {

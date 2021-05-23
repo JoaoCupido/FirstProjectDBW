@@ -80,9 +80,15 @@ p {
   font-size: 20px;
   color: var(--color-white);
   background-color: var(--color-black);
-  width: 75%;
+  width: max(75%, 300px);
   padding: 2rem 1rem;
   margin: auto;
+}
+
+b {
+  font-size: inherit;
+  font-family: inherit;
+  font-weight: bold;
 }
 
 h2 {
@@ -92,6 +98,13 @@ h2 {
   color: var(--color-black);
   background-color: transparent;
   text-align: center;
+}
+
+h1 {
+  font-family: Arial, Helvetica, Sans-serif, serif;
+  font-size: 42px;
+  text-align: center;
+  padding: 2rem;
 }
 
 span {
@@ -150,12 +163,14 @@ input[type=submit]:hover {
 }
 
 div.main {
-  margin: auto;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 3rem;
   padding: 1rem;
-  width: 70%;
+  width: max(75%, 300px);
   background-color: var(--color-blue);
-  border-radius: 4rem;
-  border: solid 1rem var(--color-dark-blue);
+  border-radius: 2rem;
+  border: solid 6px var(--color-dark-blue);
 }
 
 img.main {

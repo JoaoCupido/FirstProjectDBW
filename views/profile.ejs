@@ -15,7 +15,7 @@
 
             var socket = io();
 
-            $(".join").on('click',function () {
+            $(document).on('click',".join",function () {
                 //nome do grupo que cliquei no botao
                 var namebutton = this.value.toString();
                 //mudar nome do [Grupo Name]
@@ -156,7 +156,7 @@
                 }
             })
 
-            $(".buttonn").on('click',function(){
+            $(document).on('click',"input.buttonn",function(){
                 var uname = document.getElementById("usernamelogin").innerHTML;
                 var deniedinv = this.id;
 
@@ -168,9 +168,12 @@
                 socket.emit('remove invite', uname, deniedinv);
             })
 
-            $(".buttony").on('click',function(){
+            $(document).on('click',"input.buttony",function(){
                 var uname = document.getElementById("usernamelogin").innerHTML;
                 var acceptinv = this.id;
+
+                // insert new group as button
+                $("#online_chat_rooms:last").append('<input type="button" name="' + acceptinv + '" class="join" value="' + acceptinv + '">');
 
                 // remove roomname, buttony and buttonn
                 $('#' + acceptinv).remove();

@@ -29,6 +29,11 @@ function acceInvite(receiver, roomname, callback){
     Note.acceptInvite(receiver, roomname, callback);
 }
 
+function getUsers(roomname,callback){
+    //console.log(Note.receiveUsers(roomname));
+    return Note.receiveUsers(roomname, callback);
+}
+
 module.exports = {
     addNote,
     addGroup,
@@ -37,4 +42,5 @@ module.exports = {
     sendInvite,
     denyInvite,
     acceInvite,
+    getUsers,
 };

@@ -42,7 +42,7 @@ function removeGroup(participant, roomname, callback){
 //send message
 function addMessage(mes, roomname, callback){
     var db = mongoConfigs.getDB();
-    db.collection('chats').findOneAndUpdate({roomname: roomname},{$push: {messages:mes, replies: []}},function(err, result){
+    db.collection('chats').findOneAndUpdate({roomname: roomname},{$push: {messages: {text: mes, replies: []}}},function(err, result){
         callback(err,result);
     });
 }
@@ -78,6 +78,39 @@ function acceptInvite(receiver, room, callback){
     })
 }
 
+//give list of avaiable users in certain roomchat
+function receiveUsers(room, callback){
+    var db = mongoConfigs.getDB();
+
+    var resultado;
+
+    // array de pessoas no roomchat
+    db.collection("chats").find({roomname: room},{ projection: { _id: 0, users: 1 } }).toArray(function(err, result) {
+        if (err) throw err;
+        //console.log(result[0].users);
+        //array de pessoas no G14 (todos os users)
+        db.collection("G14").find({},{ projection: { _id: 0, username: 1 } }).toArray(function(er, res) {
+            if (er) throw er;
+            var allUsers = [];
+            var i = 0;
+            //contar numero de pessoas no G14 (todos os users)
+            db.collection("G14").countDocuments({},function(errr, count){
+                if (errr) throw errr;
+                while(i < count){
+                    allUsers.push(res[i].username);
+                    i++;
+                }
+                //console.log(allUsers);
+                //console.log(allUsers.filter(function(obj) { return (result[0].users).indexOf(obj) == -1; }));
+                resultado = allUsers.filter(function(obj) { return (result[0].users).indexOf(obj) == -1; });
+                //fonte: https://stackoverflow.com/a/15912608
+                //console.log('resultado: ' + resultado);
+                return callback(resultado);
+            });
+        });
+    });
+}
+
 module.exports = {
     insertNote,
     insertGroup,
@@ -86,4 +119,5 @@ module.exports = {
     addInvite,
     removeInvite,
     acceptInvite,
+    receiveUsers,
 };

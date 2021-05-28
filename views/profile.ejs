@@ -113,11 +113,35 @@
 
             $("#addbuttons").on('click','#adduser',function(){
                 //alert to insert name (can happen to be null)
-                var receiver = prompt("Please enter username to send invite", "");
+                //var receiver = prompt("Please enter username to send invite", "");
 
                 var roomname = document.getElementById("titleroom").innerHTML;
 
-                socket.emit('send invite', receiver, roomname);
+                socket.emit('send list invite', roomname);
+            })
+
+            socket.on('send invite', function(arrayAvaiableUsers){
+                if($('#sendinvite').length < 1) {
+                    var select = $('<select name="inviteuser" class="sendinvite"></select>');
+                    $("#adduser").after($('<input type="button" id="sendinvite" value="Send Invite">'));
+                    for (var i = 0; i < arrayAvaiableUsers.length; i++) {
+                        var option = $('<option></option>');
+                        $(option).val(arrayAvaiableUsers[i]);
+                        $(option).html(arrayAvaiableUsers[i]);
+                        $(select).append(option);
+                    }
+                    $("#adduser").after(select);
+                }
+            })
+
+            $("#sendinvite").on("click",function(){
+                var chosenoption = this.val();
+
+                var roomname = document.getElementById("titleroom").innerHTML;
+
+                $('#sendinvite').empty();
+
+                socket.emit('send invite', chosenoption, roomname);
             })
 
             $(".buttonn").on('click',function(){
@@ -194,11 +218,7 @@
     <div id = "div_invitations">
         <p>Invitation Chat rooms:</p>
         <form id="invitations_chat_rooms">
-            <% for (var k = 0; k < invites.length ; k++) { %>
-                <span id="<%= invites[k] %>"><%= invites[k] %></span>
-                <input type="button" id="<%= invites[k] %>" class="buttony" value="Accept" />
-                <input type="button" id="<%= invites[k] %>" class="buttonn" value="Decline" />
-            <% } %>
+
         </form>
 
     </div>

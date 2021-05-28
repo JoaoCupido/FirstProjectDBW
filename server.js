@@ -75,6 +75,12 @@ io.on('connection',function(socket){
             console.log('sended invite ' + roomname + ' to receiver: ' + receiver);
         })
     })
+
+    socket.on('send list invite', function(roomname){
+        return NotesController.getUsers(roomname, function(resultado){
+            io.emit('send invite', resultado);
+        });
+    })
     /*
     socket.on('isroomnameunique', function(newroomname,oldroomname){
         mongoConfigs.getDB().collection("chats").findOne({
@@ -109,17 +115,11 @@ app.post('/signup/', function(req,res){
         "username": req.body.username
     }, function(error, uname){
         if (uname !== null){
-            res.json({
-                "status": "error",
-                "message": "Username already taken!"
-            });
+            res.status(401).end('Username already taken! Please insert another username');
         }
         else{
             NotesController.addNote(req, function(){
-                res.json({
-                    "status": "success",
-                    "message": "Signed up successfully!"
-                });
+                res.status(200).end('Signup Succesfull!');
             })
         }
     })
@@ -135,10 +135,7 @@ app.post('/signin/', function (req, res) {
         "username": req.body.username
     }, function(error, uname){
         if (uname == null){
-            res.json({
-                "status": "error",
-                "message": "Account does not exist!"
-            });
+            res.status(401).end("Account does not exist!");
         }
         else{
             if(req.body.password === uname.password){
@@ -151,21 +148,14 @@ app.post('/signin/', function (req, res) {
                     var invites = uname.invites;
                     res.render( './profile.ejs', {userlogin: userlog, avatarlogin: image, rooms: userrooms, invites: invites} );
                 })
-                //res.redirect( '/profile/');
                 console.log("Login success!");
-                //res.sendFile( __dirname + "/views/" + "profile.ejs" );
             }
             else {
-                res.json({
-                    "status": "error",
-                    "message": "Incorrect password!"
-                });
+                res.status(401).end("Incorrect password!");
             }
         }
     })
 })
-
-
 
 app.get('/logout', function (req, res) {
     res.sendFile( __dirname + "/views/" + "home.html" );

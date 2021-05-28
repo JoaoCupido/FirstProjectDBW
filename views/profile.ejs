@@ -134,14 +134,26 @@
                 }
             })
 
-            $("#sendinvite").on("click",function(){
-                var chosenoption = this.val();
+            $(document).on("click","input#sendinvite",function(){
+                var chosenoption = $('select[name=inviteuser] option:selected').val();
+                //fonte: https://stackoverflow.com/questions/13089944/jquery-get-selected-option-value-not-the-text-but-the-attribute-value
 
                 var roomname = document.getElementById("titleroom").innerHTML;
 
-                $('#sendinvite').empty();
+                $('.sendinvite').remove();
+                $("input#sendinvite").remove();
 
-                socket.emit('send invite', chosenoption, roomname);
+                socket.emit('send invitee', chosenoption, roomname);
+            })
+
+            socket.on('updateinvites',function(receiver,roomname){
+                var usernameonpage = document.getElementById("usernamelogin").innerHTML;
+                if(usernameonpage === receiver){
+                    // insert new invite as button
+                    $("#invitations_chat_rooms:last").append('<span id="' + roomname + '">' + roomname + '</span>');
+                    $("#invitations_chat_rooms:last").append('<input type="button" id="' + roomname + '" class="buttony" value="Accept" />');
+                    $("#invitations_chat_rooms:last").append('<input type="button" id="' + roomname + '" class="buttonn" value="Decline" />');
+                }
             })
 
             $(".buttonn").on('click',function(){
@@ -218,7 +230,11 @@
     <div id = "div_invitations">
         <p>Invitation Chat rooms:</p>
         <form id="invitations_chat_rooms">
-
+            <% for (var k = 0; k < invites.length ; k++) { %>
+                <span id="<%= invites[k] %>"><%= invites[k] %></span>
+                <input type="button" id="<%= invites[k] %>" class="buttony" value="Accept" />
+                <input type="button" id="<%= invites[k] %>" class="buttonn" value="Decline" />
+            <% } %>
         </form>
 
     </div>

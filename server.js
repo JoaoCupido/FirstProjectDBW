@@ -70,10 +70,11 @@ io.on('connection',function(socket){
         })
     })
 
-    socket.on('send invite', function(receiver, roomname){
+    socket.on('send invitee', function(receiver, roomname){
         NotesController.sendInvite(receiver,roomname,function(){
             console.log('sended invite ' + roomname + ' to receiver: ' + receiver);
         })
+        io.emit('updateinvites',receiver,roomname);
     })
 
     socket.on('send list invite', function(roomname){

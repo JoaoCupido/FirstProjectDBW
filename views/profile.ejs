@@ -66,15 +66,21 @@
 
 
             socket.on('chat message', function (msg, username) {
-                $('#messages').append('<li style=background-color:#F5DEB3>' + (username + ": " + msg) + '</li>');
-                window.scrollTo(0, document.body.scrollHeight);
+                $('#messages').append('<li class="message">' + ('<span class="message-username">'+ username + ": " +'</span>' + '<span class="message-content">' + msg + '</span>') + '</li>');
+
+                //window.scrollTo(0, document.body.scrollHeight);
+                const element = document.querySelector("#messages")
+                element.scrollTop = element.scrollHeight;
             });
 
             socket.on('update', function (username, roomname) {
                 var roomnamehtml = document.getElementById("titleroom").innerHTML;
                 if(roomnamehtml === roomname) {
                     $('#messages').append('<li style="background-color:#000000;color:#FFFFFF">' + (username) + '</li>');
+
                     window.scrollTo(0, document.body.scrollHeight);
+                    const element = document.querySelector("#messages")
+                    element.scrollTop = element.scrollHeight;
                 }
             });
 
@@ -250,59 +256,61 @@
             </div>
         </div>
     </div>
-</div>
     <!--
 <div id="Join_Chat">
     <form id="Join_Chat_Form">
     </form>
 </div>
 -->
-<div id="feed">
+    <div id="feed">
 
-    <br>
+        <div class="grid_wrapper">
+            <div id = "chatrooms">
+                <h1>Available Chat rooms:</h1>
+                <form id="online_chat_rooms">
+                    <% for (var i = 0; i < rooms.length ; i++) { %>
+                        <input type="button" name="<%= rooms[i] %>" class="join" value="<%= rooms[i] %>">
+                    <% } %>
+                </form>
+                <form id="new_room">
+                    <input type="button" value="New Group">
+                </form>
+            </div>
 
-    <div id = "Chat_Rooms">
-        <p>Available Chat rooms:</p>
-        <form id="online_chat_rooms">
-            <% for (var i = 0; i < rooms.length ; i++) { %>
-                <input type="button" name="<%= rooms[i] %>" class="join" value="<%= rooms[i] %>">
-            <% } %>
-        </form>
-        <form id="new_room">
-            <input type="button" value="New Group">
-        </form>
+            <div id="live_feed">
+                <div id="chatroom_header">
+                    <h1 id="titleroom">[Group Name]</h1>
+                    <div id="addbuttons"></div>
+                </div>
+                <ul id="messages"></ul>
+
+            </div>
+
+            <div id = "chatroom_invitations">
+                <h1>Chat room invites:</h1>
+                <form id="invitations_chat_rooms">
+                    <% for (var k = 0; k < invites.length ; k++) { %>
+                        <span id="<%= invites[k] %>"><%= invites[k] %></span>
+                        <input type="button" id="<%= invites[k] %>" class="buttony" value="Accept" />
+                        <input type="button" id="<%= invites[k] %>" class="buttonn" value="Decline" />
+                    <% } %>
+                </form>
+            </div>
+        </div>
+
+        <div class="center">
+            <form id="feed_form" action="">
+                <input id="m"  autocomplete="off" /><button class="send">Send Message</button>
+            </form>
+        </div>
+        <div id="my_avatar">
+            <img id="youravatar" src="" alt="Your Avatar">
+            <script>
+                $("#youravatar").attr("src","<%= avatarlogin %>");
+            </script>
+            <p style="width: 324px" id="usernamelogin"><%= userlogin %></p>
+        </div>
     </div>
-
-    <div id="live_feed">
-        <p id="titleroom">[Group Name]</p>
-        <p id="addbuttons"></p>
-        <ul id="messages"></ul>
-    </div>
-
-    <div id = "div_invitations">
-        <p>Invitation Chat rooms:</p>
-        <form id="invitations_chat_rooms">
-            <% for (var k = 0; k < invites.length ; k++) { %>
-                <span id="<%= invites[k] %>"><%= invites[k] %></span>
-                <input type="button" id="<%= invites[k] %>" class="buttony" value="Accept" />
-                <input type="button" id="<%= invites[k] %>" class="buttonn" value="Decline" />
-            <% } %>
-        </form>
-
-    </div>
-
-    <form id="feed_form" action="" style="display: none">
-        <input style="width:90%" id="m"  autocomplete="off" /><button>Send Message</button>
-    </form>
-
-    <div id="my_avatar">
-        <img id="youravatar" src="" alt="Your Avatar">
-        <script>
-            $("#youravatar").attr("src","<%= avatarlogin %>");
-        </script>
-        <p style="width: 324px" id="usernamelogin"><%= userlogin %></p>
-    </div>
-</div>
 
 </body>
 

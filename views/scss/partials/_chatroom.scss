@@ -1,3 +1,195 @@
+.grid_wrapper { // https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout/Basic_Concepts_of_Grid_Layout
+  background-color: var(--color-soft-blue);
+
+  display: grid;
+  grid-template-columns: 25% 50% 25%;
+
+  height: max(60%,620px);
+
+  margin: 2rem;
+  outline: 4px solid var(--color-black);
+}
+
+#live_feed, #chatroom_invitations, #chatrooms {
+  padding: 16px;
+  border: 1px solid var(--color-black);
+}
+
+#live_feed {
+  height: 620px;
+  width: 100%;
+  position: relative;
+}
+
+/* OLD
+#live_feed {
+  position: absolute;
+  right: 100px;
+  left: 100px;
+  margin: 0 auto 25px;
+  padding: 10px;
+  background: #e6f7ff;
+  height: 620px;
+  width: 920px;
+  border: 1px solid #000000;
+  overflow: auto;
+  border-radius: 4px;
+  border-bottom: 4px solid #000000;
+}
+
+#div_invitations {
+  position: absolute;
+  right: 10px;
+  width: 350px;
+  height: 620px;
+  background: #e6f7ff;
+  border: 3px solid #000000;
+  padding: 10px;
+}
+
+#Chat_Rooms{
+  position: absolute;
+  left: 10px;
+  width: 350px;
+  height: 620px;
+  background: #e6f7ff;
+  border: 3px solid #000000;
+  padding: 10px;
+} */
+
+
+#messages {
+
+  overflow: auto;
+  height: 400px;
+  width: 97%; // not 100% porque ficava demasiado grande?
+
+
+  position: absolute;
+  bottom: 0;
+
+  margin-bottom: 8px;
+
+  & li {
+    font-size: 15px;
+    margin: 2px auto;
+    padding: 8px;
+    border-radius: 2px;
+  }
+}
+
+li.message {
+  background-color: #F5DEB3;
+
+  & .message-username {
+    font-weight: bold;
+  }
+
+  & .message-content {
+  }
+}
+
+#chatroom_header {
+  background-color: var(--color-black);
+  height: 180px;
+  top: 0;
+}
+
+h1#titleroom {
+  color: var(--color-white);
+}
+
+div#addbuttons {
+  margin: auto;
+  width: 100%;
+  padding: 6px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button#editname, button#adduser {
+  border: solid 0px var(--color-black);
+  padding: 4px;
+  margin: 2px;
+
+  background-color: var(--color-black);
+  --shadow: var(--color-black); // local variable for shadow color bc it changes when u hover/focus
+
+  &:hover, &:focus {
+    border: solid 4px var(--color-yellow);
+    --shadow: var(--color-yellow); // changes shadow color
+
+    transition: border 180ms ease;
+  }
+
+
+  img { // drop shadow para a imagem ser mais gira no background branco
+    filter: drop-shadow(0 0 0.75rem var(--shadow));
+
+    &:hover{
+      transition: filter 400ms linear;
+    }
+  }
+}
+
+
+div.center {
+  width: 50%;
+  margin: 0 auto;
+}
+#feed_form{
+}
+
+/*#feed_form{
+  position: absolute;
+  left: 500px;
+  bottom: 170px;
+  display: none;
+}*/
+
+input#m {
+  width: 100%;
+  padding: 6px;
+  margin: 4px;
+
+  box-shadow: 1px 2px 5px rgba(0%, 0%, 0%, 40%);
+  border: 1px solid var(--color-white);
+
+  &:hover, &:focus{
+    border: 1px solid var(--color-blue);
+  }
+
+}
+
+button.send {
+  padding: 4px;
+  margin: 4px;
+}
+
+
+
+/*div#my_avatar {
+  left: 0px;
+  bottom: 0px;
+  height: 100px;
+  width: auto;
+}*/
+
+#youravatar{
+  position: absolute;
+  left: 15px;
+  bottom: 105px;
+}
+
+#usernamelogin{
+  position: absolute;
+  left: 15px;
+  bottom: 25px;
+}
+
+
 /* FONTE: https://codepen.io/DavidBradbury/pen/HuCqx */
 
 .input-hidden {
@@ -40,57 +232,4 @@ input[type="text_msg"]{
   margin-bottom: 3px;
   margin-top: 3px;
   outline: none;
-}
-
-#Chat_Rooms{
-  position: absolute;
-  left: 10px;
-  width: 350px;
-  height: 620px;
-  background: #e6f7ff;
-  border: 3px solid #000000;
-  padding: 10px;
-}
-
-#div_invitations {
-  position: absolute;
-  right: 10px;
-  width: 350px;
-  height: 620px;
-  background: #e6f7ff;
-  border: 3px solid #000000;
-  padding: 10px;
-}
-
-#live_feed {
-  position: absolute;
-  right: 100px;
-  left: 100px;
-  margin: 0 auto 25px;
-  padding: 10px;
-  background: #e6f7ff;
-  height: 620px;
-  width: 920px;
-  border: 1px solid #000000;
-  overflow: auto;
-  border-radius: 4px;
-  border-bottom: 4px solid #000000;
-}
-
-#youravatar{
-  position: absolute;
-  left: 15px;
-  bottom: 105px;
-}
-
-#usernamelogin{
-  position: absolute;
-  left: 15px;
-  bottom: 25px;
-}
-
-#feed_form{
-  position: absolute;
-  left: 500px;
-  bottom: 170px;
 }

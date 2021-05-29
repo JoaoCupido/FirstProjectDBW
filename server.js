@@ -33,10 +33,12 @@ io.on('connection',function(socket){
     });
 
     socket.on("chat message", function(msg,titleroom,username){
-        NotesController.insertMessage(msg,titleroom,function(){
+        var objectID = require('mongodb').ObjectID;
+        var id = new objectID();
+        NotesController.insertMessage(msg,titleroom,id,function(){
             console.log('message: '+msg + " in room: " + titleroom);
         })
-        io.emit('chat message', msg, username);
+        io.emit('chat message', msg, username, id);
     })
 
     socket.on('remove invite', function(uname, invname){
@@ -94,6 +96,13 @@ io.on('connection',function(socket){
         io.emit('deletegroup', roomname, username);
     });
 
+    socket.on('addcomment', function(room, mensid, comment, username){
+        var objectID = require('mongodb').ObjectID;
+        var id = new objectID();
+        NotesController.addComment(room,mensid,comment,id);
+
+        io.emit('insertcomment',room, mensid, comment, id, username);
+    })
 });
 
 mongoConfigs.connect(function(err){

@@ -40,9 +40,9 @@ function removeGroup(participant, roomname, callback){
 }
 
 //send message
-function addMessage(mes, roomname, callback){
+function addMessage(mes, roomname, id, callback){
     var db = mongoConfigs.getDB();
-    db.collection('chats').findOneAndUpdate({roomname: roomname},{$push: {messages: {text: mes, replies: []}}},function(err, result){
+    db.collection('chats').findOneAndUpdate({roomname: roomname},{$push: {messages: {_id: id, text: mes, replies: []}}},function(err, result){
         callback(err,result);
     });
 }
@@ -131,6 +131,42 @@ function nameChanger(newname, oldname){
     });
 }
 
+function insertComment(room, mensid, comentario, comentarioid){
+    var db = mongoConfigs.getDB();
+
+    db.collection("chats").find({roomname: room},{ projection: { _id: 0, messages: 1 } }).toArray(function(err,result){
+        if(err) throw err;
+        var arrayindices = findElement(result[0].messages, room, mensid,comentario,comentarioid,[]);
+        var stringfield = 'messages';
+        for(var i = 0; i < arrayindices.length; i++){
+            if(i+1 === arrayindices.length){
+                stringfield += '.'+arrayindices[i];
+                stringfield += '.replies';
+                db.collection("chats").findOneAndUpdate({roomname: room}, {$push: {[stringfield]: {_id: comentarioid, text: comentario, replies: []}}});
+            }
+            else{
+                stringfield += '.'+arrayindices[i];
+                stringfield += '.replies';
+            }
+        }
+    })
+}
+
+function findElement(array, room, mensid,comentario,comentarioid,arrayindices){
+    for(var i = 0; i < array.length; i++){
+        var textobj = array[i];
+        if(textobj._id == mensid){
+            arrayindices.push(i);
+            break;
+        }
+        else if(textobj._id != mensid && textobj.replies.length > 0){
+            arrayindices.push(i);
+            findElement(textobj.replies,room,mensid,comentario,comentarioid,arrayindices);
+        }
+    }
+    return arrayindices;
+}
+
 module.exports = {
     insertNote,
     insertGroup,
@@ -141,4 +177,5 @@ module.exports = {
     acceptInvite,
     receiveUsers,
     nameChanger,
+    insertComment,
 };

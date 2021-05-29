@@ -13,8 +13,8 @@ function leaveGroup(user, room, callback){
     Note.removeGroup(user, room,callback);
 }
 
-function insertMessage(mes,room,callback){
-    Note.addMessage(mes,room,callback);
+function insertMessage(mes,room,id,callback){
+    Note.addMessage(mes,room,id,callback);
 }
 
 function sendInvite(receiver, roomname, callback){
@@ -38,6 +38,10 @@ function changeName(newname, oldname){
     Note.nameChanger(newname, oldname);
 }
 
+function addComment(room, mensid, comentario, comentid){
+    Note.insertComment(room, mensid, comentario, comentid);
+}
+
 module.exports = {
     addNote,
     addGroup,
@@ -48,4 +52,5 @@ module.exports = {
     acceInvite,
     getUsers,
     changeName,
+    addComment,
 };

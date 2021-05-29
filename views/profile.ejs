@@ -71,8 +71,9 @@
             });
 
 
-            socket.on('chat message', function (msg, username) {
-                $('#messages').append('<li style=background-color:#F5DEB3>' + (username + ": " + msg) + '</li>');
+            socket.on('chat message', function (msg, username, objectID) {
+                $('#messages').append('<li style=background-color:#F5DEB3 id=' + objectID + '>' + (username + ": " + msg) + '</li>');
+                $('li#' + objectID).append('<button id="' + objectID + '" class="comment"><img src="/img/comment.png" alt="Comment"/></button>');
                 window.scrollTo(0, document.body.scrollHeight);
             });
 
@@ -237,6 +238,34 @@
                     $('ul#messages').empty();
                     $('#feed_form').attr("style","display: none");
                 }
+            })
+
+            $(document).on("click","button.comment",function() {
+                //erro
+                var idmens = this.id;
+
+                //alert to insert comment (can happen to be null)
+                var comenta = prompt("Insert comment", "");
+
+                if(comenta !== "" && comenta != null) {
+                    //get old room name
+                    var roomname = document.getElementById("titleroom").innerHTML;
+
+                    // get username that login
+                    var username = document.getElementById("usernamelogin").innerHTML;
+
+                    // add comment in socket
+                    socket.emit('addcomment', roomname, idmens, comenta, username);
+                }
+                else{
+                    alert('Not possible to send this comment!');
+                }
+            })
+
+            socket.on('insertcomment',function(room,mensid,comment,commentid,username){
+                $('li#' + mensid).append('<li style="background-color:#F5DEB3; padding-left:15px" id=' + commentid + '>' + (username + ": " + comment) + '</li>');
+                $('li#' + commentid).append('<button id="' + commentid + '" class="comment"><img src="/img/comment.png" alt="Comment"/></button>');
+                window.scrollTo(0, document.body.scrollHeight);
             })
         });
     </script>

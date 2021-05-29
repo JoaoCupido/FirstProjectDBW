@@ -24,6 +24,9 @@
                 //show text message
                 $("#feed_form").attr("style","display: block");
 
+                //remove last group messages
+                $('ul#messages').empty();
+
                 //get username login
                 var username = document.getElementById("usernamelogin").innerHTML;
                 socket.emit("join",username,namebutton);
@@ -41,6 +44,9 @@
 
                 // show insert text message box
                 $("#feed_form").attr("style","display: block");
+
+                //remove last group messages
+                $('ul#messages').empty();
 
                 // get username that login
                 var username = document.getElementById("usernamelogin").innerHTML;

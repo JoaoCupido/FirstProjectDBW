@@ -100,21 +100,38 @@
                 //alert to insert name (can happen to be null)
                 var newroomname = prompt("Please enter new room name", "");
 
-                //get old room name
-                var oldroomname = document.getElementById("titleroom").innerHTML;
+                if(newroomname !== "" && newroomname != null) {
+                    //get old room name
+                    var oldroomname = document.getElementById("titleroom").innerHTML;
 
-                // check if newroomname is unique in db
-                socket.emit('isroomnameunique',newroomname,oldroomname);
+                    // check if newroomname is unique in db
+                    socket.emit('isroomnameunique', newroomname, oldroomname);
 
-                // change title room
-                //document.getElementById("titleroom").innerHTML = newroomname;
+                }
+                else{
+                    alert('Not possible to enter this room name!');
+                }
             })
 
+            socket.on('changenameroom',function(newname, oldname){
+                var roomnamehtml = document.getElementById("titleroom").innerHTML;
+                if(roomnamehtml === oldname){
+                    // change html name
+                    $('#titleroom').html(newname);
+                }
+
+                //change value and name of button that has oldname
+                $('input.join[name=' + oldname + ']').attr("value",newname);
+                $('input.join[name=' + oldname + ']').attr("name",newname);
+
+                //change ids and html of invite with oldname
+                $('span#'+oldname+'[id='+oldname+']').html(newname);
+                $('span#'+oldname+'[id='+oldname+']').attr("id",newname);
+                $('input#'+oldname+'.buttony').attr("id",newname);
+                $('input#'+oldname+'.buttonn').attr("id",newname);
+            })
 
             $("#addbuttons").on('click','#adduser',function(){
-                //alert to insert name (can happen to be null)
-                //var receiver = prompt("Please enter username to send invite", "");
-
                 var roomname = document.getElementById("titleroom").innerHTML;
 
                 socket.emit('send list invite', roomname);

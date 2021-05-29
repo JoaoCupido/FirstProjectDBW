@@ -67,10 +67,10 @@ function removeInvite(receiver, room, callback){
 //accepting invite
 function acceptInvite(receiver, room, callback){
     var db = mongoConfigs.getDB();
-    db.collection("G14").update({username: receiver}, {$pull: {invites: room}},function(err, result){
+    db.collection("G14").findOneAndUpdate({username: receiver}, {$pull: {invites: room}},function(err, result){
         callback(err, result);
     })
-    db.collection("G14").findOneAndUpdate({username: receiver},{$push: {groups: room}}, function(err, result){
+    db.collection("G14").findOneAndUpdate({username: receiver}, {$push: {groups: room}}, function(err, result){
         callback(err, result);
     });
     db.collection("chats").findOneAndUpdate({roomname: room},{$push: {users: receiver}},function(err, result){
@@ -78,7 +78,7 @@ function acceptInvite(receiver, room, callback){
     })
 }
 
-//give list of avaiable users in certain roomchat
+//give list of available users in certain roomchat
 function receiveUsers(room, callback){
     var db = mongoConfigs.getDB();
 
@@ -88,13 +88,13 @@ function receiveUsers(room, callback){
     db.collection("chats").find({roomname: room},{ projection: { _id: 0, users: 1 } }).toArray(function(err, result) {
         if (err) throw err;
         //console.log(result[0].users);
-        //array de pessoas no G14 (todos os users)
-        db.collection("G14").find({},{ projection: { _id: 0, username: 1 } }).toArray(function(er, res) {
+        //array de pessoas no G14 (todos os users que ainda não tenham o convite)
+        db.collection("G14").find({invites: {$nin: [room]}},{ projection: { _id: 0, username: 1 } }).toArray(function(er, res) {
             if (er) throw er;
             var allUsers = [];
             var i = 0;
             //contar numero de pessoas no G14 (todos os users)
-            db.collection("G14").countDocuments({},function(errr, count){
+            db.collection("G14").countDocuments({invites: {$nin: [room]}},{},function(errr, count){
                 if (errr) throw errr;
                 while(i < count){
                     allUsers.push(res[i].username);
@@ -111,6 +111,26 @@ function receiveUsers(room, callback){
     });
 }
 
+//change room name if possible
+function nameChanger(newname, oldname){
+    var db = mongoConfigs.getDB();
+
+    db.collection("chats").find({name:{$in:[newname]}},{ projection: { _id: 0, roomname: 1 } }).toArray(function(err, result) {
+        if (err) throw err;
+        if(result.length === 0){
+            //change name of the room on mongodb
+            db.collection("chats").findOneAndUpdate({roomname: oldname},{$push: {name: newname }});
+            db.collection("chats").findOneAndUpdate({roomname: oldname},{$set: {roomname: newname}});
+            //change string of groups in g14
+            db.collection("G14").updateMany({groups: {$in: [oldname]}},{$push: {groups: newname}});
+            db.collection("G14").updateMany({groups: {$in: [oldname]}},{$pull: {groups: oldname}});
+            //change string of invites with oldname
+            db.collection("G14").updateMany({invites: {$in: [oldname]}},{$push: {invites: newname}});
+            db.collection("G14").updateMany({invites: {$in: [oldname]}},{$pull: {invites: oldname}});
+        }
+    });
+}
+
 module.exports = {
     insertNote,
     insertGroup,
@@ -120,4 +140,5 @@ module.exports = {
     removeInvite,
     acceptInvite,
     receiveUsers,
+    nameChanger,
 };

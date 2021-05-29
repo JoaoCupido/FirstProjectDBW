@@ -82,13 +82,11 @@ io.on('connection',function(socket){
             io.emit('send invite', resultado);
         });
     })
-    /*
+
     socket.on('isroomnameunique', function(newroomname,oldroomname){
-        mongoConfigs.getDB().collection("chats").findOne({
-            ""
-        }
+        NotesController.changeName(newroomname,oldroomname);
+        io.emit('changenameroom',newroomname,oldroomname);
     })
-     */
 });
 
 mongoConfigs.connect(function(err){

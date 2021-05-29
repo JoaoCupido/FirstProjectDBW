@@ -34,6 +34,10 @@ function getUsers(roomname,callback){
     return Note.receiveUsers(roomname, callback);
 }
 
+function changeName(newname, oldname){
+    Note.nameChanger(newname, oldname);
+}
+
 module.exports = {
     addNote,
     addGroup,
@@ -43,4 +47,5 @@ module.exports = {
     denyInvite,
     acceInvite,
     getUsers,
+    changeName,
 };

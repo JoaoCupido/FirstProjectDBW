@@ -51,6 +51,8 @@
 
                 //add admin properties (edit name, send invites, etc)
                 socket.emit('isadmin',username, namegroup);
+
+                $("#online_chat_rooms:last").append('<input type="button" name="' + namegroup + '" class="join" value="' + namegroup + '">');
             });
 
             $('#feed_form').submit(function () {

@@ -79,7 +79,9 @@
             socket.on('adminprop', function(uname, roomname){
                 //add properties
                 var roomnamehtml = document.getElementById("titleroom").innerHTML;
-                if(roomnamehtml === roomname && $('#adduser').length < 1 && $('#editname').length < 1) {
+                var username = document.getElementById("usernamelogin").innerHTML;
+                if(roomnamehtml === roomname && username === uname && $('#adduser').length < 1 && $('#editname').length < 1) {
+                    $("#addbuttons").empty();
                     $("#addbuttons").append('<button id="editname"><img src="/img/edit.png" alt="Edit Group Name"/></button>');
                     $("#addbuttons").append('<button id="adduser"><img src="/img/add_user.png" alt="Add User to Group"/></button>');
                 }
@@ -90,12 +92,15 @@
                 var roomnamehtml = document.getElementById("titleroom").innerHTML;
                 var namelen = roomname.length;
                 roomnamehtml.substring(0,namelen);
-                if(roomnamehtml === roomname){
+                var username = document.getElementById("usernamelogin").innerHTML;
+                if(roomnamehtml === roomname && username === uname && $('#removeuser').length < 1) {
                     $("#addbuttons").empty();
+                    if(roomnamehtml !== "Global Chat") {
+                        $("#addbuttons").append('<button id="removeuser"><img src="/img/remove_user.png" alt="Leave Group"/></button>');
+                    }
                 }
             })
 
-            //INCOMPLETO
             $("#addbuttons").on('click','#editname',function(){
                 //alert to insert name (can happen to be null)
                 var newroomname = prompt("Please enter new room name", "");
@@ -200,6 +205,31 @@
                 socket.emit('accept invite', uname, acceptinv);
             })
 
+            //leave group
+            $("#addbuttons").on('click','#removeuser',function(){
+                //alert to confirm (can be true or false)
+                if(confirm("Are you sure you want to leave the group?")){
+                    //get room name
+                    var roomname = document.getElementById("titleroom").innerHTML;
+
+                    // get username that login
+                    var username = document.getElementById("usernamelogin").innerHTML;
+
+                    socket.emit('leaveroom', roomname, username);
+                }
+            })
+
+            socket.on('deletegroup',function(roomname,username){
+                var usern = document.getElementById("usernamelogin").innerHTML;
+                if(usern === username){
+                    $('input.join[name=' + roomname + ']').remove();
+
+                    $('p#titleroom').html('[Group Name]');
+                    $('#addbuttons').empty();
+                    $('ul#messages').empty();
+                    $('#feed_form').attr("style","display: none");
+                }
+            })
         });
     </script>
 </head>

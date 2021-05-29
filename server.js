@@ -54,7 +54,6 @@ io.on('connection',function(socket){
     })
 
     socket.on('isadmin',function(uname, roomname){
-        var isAdmin = false;
         mongoConfigs.getDB().collection("chats").findOne({
             "roomname": roomname,
             "admin": uname
@@ -87,6 +86,14 @@ io.on('connection',function(socket){
         NotesController.changeName(newroomname,oldroomname);
         io.emit('changenameroom',newroomname,oldroomname);
     })
+
+    socket.on('leaveroom', function(roomname,username){
+        NotesController.leaveGroup(username,roomname,function(){
+            console.log('leave group ' + roomname + ' as username: ' + username);
+        })
+        io.emit('deletegroup', roomname, username);
+    });
+
 });
 
 mongoConfigs.connect(function(err){

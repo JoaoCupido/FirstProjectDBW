@@ -27,13 +27,13 @@ function insertGroup(creator, namegroupe, callback){
     });
 }
 
-//delete group
+//delete user from group
 function removeGroup(participant, roomname, callback){
     var db = mongoConfigs.getDB();
     db.collection('G14').findOneAndUpdate({username: participant},{$pull: {groups: roomname}},function(err,result){
         callback(err,result);
     });
-    //isto nao elimina o grupo inteiro
+
     db.collection('chats').findOneAndUpdate({roomname: roomname},{$pull: {users: participant}},function(err,result){
         callback(err,result);
     });

@@ -9,8 +9,8 @@ function addGroup(user, namegroup, callback){
 }
 
 //unused
-function leaveGroup(req,callback){
-    Note.removeGroup(req.body.username, req.body.group,callback);
+function leaveGroup(user, room, callback){
+    Note.removeGroup(user, room,callback);
 }
 
 function insertMessage(mes,room,callback){

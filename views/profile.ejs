@@ -335,9 +335,11 @@
                 if(roomnamee == roomname && usernamee == usernamee){
                     if(result === null){
                         //dar efeito de que foi dado o like
+                        $('button#' + idmens + '.like').attr('style','background-color: yellow;');
                     }
                     else{
-                        //dar efeito de que foi dado o dislike
+                        //dar efeito de que foi removido o like
+                        $('button#' + idmens + '.like').attr('style','background-color;');
                     }
                 }
             })

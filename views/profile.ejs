@@ -71,8 +71,8 @@
             });
 
 
-            socket.on('chat message', function (msg, username) {
-                $('#messages').append('<li class="message">' + ('<span class="message-username">'+ username + ": " +'</span>' + '<span class="message-content">' + msg + '</span>') + '</li>');
+            socket.on('chat message', function (msg, username, objectID) {
+                $('#messages').append('<li class="message" id= ' + objectID + '>' + ('<span class="message-username">'+ username + ": " +'</span>' + '<span class="message-content">' + msg + '</span>') + '</li>');
                 $('li#' + objectID).append('<button id="' + objectID + '" class="comment"><img src="/img/comment.png" alt="Comment"/></button>');
 
                 //window.scrollTo(0, document.body.scrollHeight);

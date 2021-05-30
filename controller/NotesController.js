@@ -42,6 +42,10 @@ function addComment(room, mensid, comentario, comentid){
     Note.insertComment(room, mensid, comentario, comentid);
 }
 
+function addReply(room, mensid, reply, replyid){
+    Note.createReply(room, mensid, reply, replyid);
+}
+
 module.exports = {
     addNote,
     addGroup,
@@ -53,4 +57,5 @@ module.exports = {
     getUsers,
     changeName,
     addComment,
+    addReply,
 };

@@ -143,6 +143,7 @@ function nameChanger(newname, oldname){
     });
 }
 
+//add comment
 function insertComment(room, mensid, comentario, comentarioid){
     var db = mongoConfigs.getDB();
 
@@ -164,6 +165,7 @@ function insertComment(room, mensid, comentario, comentarioid){
     })
 }
 
+//find where to put comment
 function findElement(array, room, mensid,comentario,comentarioid,arrayindices, i){
     for(i; i < array.length; i++){
         var textobj = array[i];
@@ -179,6 +181,12 @@ function findElement(array, room, mensid,comentario,comentarioid,arrayindices, i
     return arrayindices;
 }
 
+//send reply
+function createReply(room, mensid, reply, replyid){
+    var db = mongoConfigs.getDB();
+    db.collection('chats').findOneAndUpdate({roomname: room},{$push: {messages: {_id: replyid, text: reply, replies: []}}});
+}
+
 module.exports = {
     insertNote,
     insertGroup,
@@ -190,4 +198,5 @@ module.exports = {
     receiveUsers,
     nameChanger,
     insertComment,
+    createReply,
 };

@@ -35,7 +35,7 @@
                 socket.emit('isadmin',username, namebutton);
             });
 
-            $("#new_room").click(function () {
+            $("#new_room input").click(function () {
                 // nome do group
                 var namegroup = Date.now().toString();
 
@@ -76,6 +76,7 @@
             socket.on('chat message', function (msg, username, objectID) {
                 $('#messages').append('<li class="message" id= ' + objectID + '>' + ('<span class="message-username">'+ username + ": " +'</span>' + '<span class="message-content">' + msg + '</span>') + '</li>');
                 $('li#' + objectID).append('<button id="' + objectID + '" class="comment"><img src="/img/comment.png" alt="Comment"/></button>');
+                $('li#' + objectID).append('<button id="' + objectID + '" class="reply"><img src="/img/reply.png" alt="Direct Reply"/></button>');
 
                 //window.scrollTo(0, document.body.scrollHeight);
                 const element = document.querySelector("#messages")
@@ -272,7 +273,39 @@
             socket.on('insertcomment',function(room,mensid,comment,commentid,username){
                 $('li#' + mensid).append('<li id=' + commentid + ' class="comment">' + ('<span class="message-username">' + username + ": " + '</span>' + '<span class="message-content">' + comment + '</span>') + '</li>');
                 $('li#' + commentid).append('<button id="' + commentid + '" class="comment"><img src="/img/comment.png" alt="Comment"/></button>');
+                $('li#' + commentid).append('<button id="' + commentid + '" class="reply"><img src="/img/reply.png" alt="Direct Reply"/></button>');
                 window.scrollTo(0, document.body.scrollHeight);
+            })
+
+            $(document).on("click","button.reply",function() {
+                var idmens = this.id;
+
+                //alert to insert comment (can happen to be null)
+                var reply = prompt("Insert comment", "");
+
+                if(reply !== "" && reply != null) {
+                    //get old room name
+                    var roomname = document.getElementById("titleroom").innerHTML;
+
+                    // get username that login
+                    var username = document.getElementById("usernamelogin").innerHTML;
+
+                    // add comment in socket
+                    socket.emit('addreply', roomname, idmens, reply, username);
+                }
+                else{
+                    alert('Not possible to send this reply!');
+                }
+            })
+
+            socket.on('insertreply',function(room,mensid,reply,replyid,username){
+                $('#messages').append('<li id=' + replyid + ' class="message">' + ('<span class="message-username">' + username + ": " + '</span>' + '<span class="message-content" >' + reply + '</span>') + '</li>');
+                $('li#' + replyid).append('<button id="' + replyid + '" class="comment"><img src="/img/comment.png" alt="Comment"/></button>');
+                $('li#' + replyid).append('<button id="' + replyid + '" class="reply"><img src="/img/reply.png" alt="Direct Reply"/></button>');
+
+                //window.scrollTo(0, document.body.scrollHeight);
+                const element = document.querySelector("#messages")
+                element.scrollTop = element.scrollHeight;
             })
         });
     </script>

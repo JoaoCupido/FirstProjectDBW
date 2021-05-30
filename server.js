@@ -103,6 +103,14 @@ io.on('connection',function(socket){
 
         io.emit('insertcomment',room, mensid, comment, id, username);
     })
+
+    socket.on('addreply', function(room, mensid, reply, username){
+        var objectID = require('mongodb').ObjectID;
+        var id = new objectID();
+        NotesController.addReply(room,mensid,reply,id);
+
+        io.emit('insertreply',room, mensid, reply, id, username);
+    })
 });
 
 mongoConfigs.connect(function(err){

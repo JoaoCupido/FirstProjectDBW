@@ -59,11 +59,9 @@
 
 
 #messages {
-
   overflow: auto;
   height: 400px;
   width: 97%; // not 100% porque ficava demasiado grande?
-
 
   position: absolute;
   bottom: 0;
@@ -75,17 +73,44 @@
     margin: 2px auto;
     padding: 8px;
     border-radius: 2px;
+    list-style-type: none;
+  }
+
+  & li.comment {
+    padding-left: 16px;
+    padding-bottom: 0px;
+  }
+
+  & li.message {
+    background-color: #F5DEB3;
   }
 }
 
-li.message {
-  background-color: #F5DEB3;
-
+li.message, li.comment {
   & .message-username {
     font-weight: bold;
   }
+}
 
-  & .message-content {
+button.comment {
+  margin-left: 8px;
+  display: inline-block;
+
+  padding: 1px;
+  bottom: 0;
+
+  background-color: var(--color-soft-blue);
+  border: solid 1px var(--color-black);
+
+  & img {
+    width: 14px;
+    height: 14px;
+    padding: 1px;
+  }
+
+  &:hover, &:focus {
+    border: solid 1px var(--color-blue);
+
   }
 }
 

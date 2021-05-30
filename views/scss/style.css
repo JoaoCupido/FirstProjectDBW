@@ -263,14 +263,37 @@ body {
   margin: 2px auto;
   padding: 8px;
   border-radius: 2px;
+  list-style-type: none;
 }
-
-li.message {
+#messages li.comment {
+  padding-left: 16px;
+  padding-bottom: 0px;
+}
+#messages li.message {
   background-color: #F5DEB3;
 }
-li.message .message-username {
+
+li.message .message-username, li.comment .message-username {
   font-weight: bold;
 }
+
+button.comment {
+  margin-left: 8px;
+  display: inline-block;
+  padding: 1px;
+  bottom: 0;
+  background-color: var(--color-soft-blue);
+  border: solid 1px var(--color-black);
+}
+button.comment img {
+  width: 14px;
+  height: 14px;
+  padding: 1px;
+}
+button.comment:hover, button.comment:focus {
+  border: solid 1px var(--color-blue);
+}
+
 #chatroom_header {
   background-color: var(--color-black);
   height: 180px;

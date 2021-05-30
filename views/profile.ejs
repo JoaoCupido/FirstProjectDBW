@@ -269,7 +269,7 @@
             })
 
             socket.on('insertcomment',function(room,mensid,comment,commentid,username){
-                $('li#' + mensid).append('<li style="background-color:#F5DEB3; padding-left:15px" id=' + commentid + '>' + (username + ": " + comment) + '</li>');
+                $('li#' + mensid).append('<li id=' + commentid + ' class="comment">' + ('<span class="message-username">' + username + ": " + '</span>' + '<span class="message-content">' + comment + '</span>') + '</li>');
                 $('li#' + commentid).append('<button id="' + commentid + '" class="comment"><img src="/img/comment.png" alt="Comment"/></button>');
                 window.scrollTo(0, document.body.scrollHeight);
             })

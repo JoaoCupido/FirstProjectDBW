@@ -46,6 +46,10 @@ function addReply(room, mensid, reply, replyid){
     Note.createReply(room, mensid, reply, replyid);
 }
 
+function changeLike(room, idmens, username, callback){
+    return Note.changLike(room, idmens, username, callback);
+}
+
 module.exports = {
     addNote,
     addGroup,
@@ -58,4 +62,5 @@ module.exports = {
     changeName,
     addComment,
     addReply,
+    changeLike,
 };

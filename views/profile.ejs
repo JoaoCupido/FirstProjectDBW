@@ -77,6 +77,7 @@
                 $('#messages').append('<li class="message" id= ' + objectID + '>' + ('<span class="message-username">'+ username + ": " +'</span>' + '<span class="message-content">' + msg + '</span>') + '</li>');
                 $('li#' + objectID).append('<button id="' + objectID + '" class="comment"><img src="/img/comment.png" alt="Comment"/></button>');
                 $('li#' + objectID).append('<button id="' + objectID + '" class="reply"><img src="/img/reply.png" alt="Direct Reply"/></button>');
+                $('li#' + objectID).append('<button id="' + objectID + '" class="like"><img src="/img/like.png" alt="Like"/></button>');
 
                 //window.scrollTo(0, document.body.scrollHeight);
                 const element = document.querySelector("#messages")
@@ -275,6 +276,7 @@
                 $('li#' + mensid).append('<li id=' + commentid + ' class="comment">' + ('<span class="message-username">' + username + ": " + '</span>' + '<span class="message-content">' + comment + '</span>') + '</li>');
                 $('li#' + commentid).append('<button id="' + commentid + '" class="comment"><img src="/img/comment.png" alt="Comment"/></button>');
                 $('li#' + commentid).append('<button id="' + commentid + '" class="reply"><img src="/img/reply.png" alt="Direct Reply"/></button>');
+                $('li#' + commentid).append('<button id="' + commentid + '" class="like"><img src="/img/like.png" alt="Like"/></button>');
                 window.scrollTo(0, document.body.scrollHeight);
             })
 
@@ -303,10 +305,41 @@
                 $('#messages').append('<li id=' + replyid + ' class="message">' + '<a href="#' + mensid + '">' +('<span class="message-username">' + username + ": " + '</span>' + '<span class="message-content" >' + reply + '</span>') + '</a>' + '</li>');
                 $('li#' + replyid).append('<button id="' + replyid + '" class="comment"><img src="/img/comment.png" alt="Comment"/></button>');
                 $('li#' + replyid).append('<button id="' + replyid + '" class="reply"><img src="/img/reply.png" alt="Direct Reply"/></button>');
+                $('li#' + replyid).append('<button id="' + replyid + '" class="like"><img src="/img/like.png" alt="Like"/></button>');
 
                 //window.scrollTo(0, document.body.scrollHeight);
                 const element = document.querySelector("#messages")
                 element.scrollTop = element.scrollHeight;
+            })
+
+            $(document).on("click","button.like",function() {
+                var idmens = this.id;
+
+                //get old room name
+                var roomname = document.getElementById("titleroom").innerHTML;
+
+                // get username that login
+                var username = document.getElementById("usernamelogin").innerHTML;
+
+                // change like in socket
+                socket.emit('changelike', roomname, idmens, username);
+            })
+
+            socket.on('updatelike',function(roomname,idmens,username,result){
+                //get old room name
+                var roomnamee = document.getElementById("titleroom").innerHTML;
+
+                // get username that login
+                var usernamee = document.getElementById("usernamelogin").innerHTML;
+
+                if(roomnamee == roomname && usernamee == usernamee){
+                    if(result === null){
+                        //dar efeito de que foi dado o like
+                    }
+                    else{
+                        //dar efeito de que foi dado o dislike
+                    }
+                }
             })
         });
     </script>

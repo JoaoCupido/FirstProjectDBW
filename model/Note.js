@@ -54,7 +54,7 @@ function removeGroup(participant, roomname, callback){
 //send message
 function addMessage(mes, roomname, id, callback){
     var db = mongoConfigs.getDB();
-    db.collection('chats').findOneAndUpdate({roomname: roomname},{$push: {messages: {_id: id, text: mes, replies: []}}},function(err, result){
+    db.collection('chats').findOneAndUpdate({roomname: roomname},{$push: {messages: {_id: id, text: mes, replies: [], likes: []}}},function(err, result){
         callback(err,result);
     });
 }
@@ -149,13 +149,13 @@ function insertComment(room, mensid, comentario, comentarioid){
 
     db.collection("chats").find({roomname: room},{ projection: { _id: 0, messages: 1 } }).toArray(function(err,result){
         if(err) throw err;
-        var arrayindices = findElement(result[0].messages, room, mensid,comentario,comentarioid,[], 0);
+        var arrayindices = findElement(result[0].messages, mensid,[], 0);
         var stringfield = 'messages';
         for(var i = 0; i < arrayindices.length; i++){
             if(i+1 === arrayindices.length){
                 stringfield += '.'+arrayindices[i];
                 stringfield += '.replies';
-                db.collection("chats").findOneAndUpdate({roomname: room}, {$push: {[stringfield]: {_id: comentarioid, text: comentario, replies: []}}});
+                db.collection("chats").findOneAndUpdate({roomname: room}, {$push: {[stringfield]: {_id: comentarioid, text: comentario, replies: [], likes: []}}});
             }
             else{
                 stringfield += '.'+arrayindices[i];
@@ -166,7 +166,7 @@ function insertComment(room, mensid, comentario, comentarioid){
 }
 
 //find where to put comment
-function findElement(array, room, mensid,comentario,comentarioid,arrayindices, i){
+function findElement(array, mensid,arrayindices, i){
     for(i; i < array.length; i++){
         var textobj = array[i];
         if(textobj._id == mensid){
@@ -175,7 +175,7 @@ function findElement(array, room, mensid,comentario,comentarioid,arrayindices, i
         }
         else if(textobj._id != mensid && textobj.replies.length > 0){
             arrayindices.push(i);
-            findElement(textobj.replies,room,mensid,comentario,comentarioid,arrayindices, 0);
+            findElement(textobj.replies,mensid,arrayindices, 0);
         }
     }
     return arrayindices;
@@ -184,7 +184,39 @@ function findElement(array, room, mensid,comentario,comentarioid,arrayindices, i
 //send reply
 function createReply(room, mensid, reply, replyid){
     var db = mongoConfigs.getDB();
-    db.collection('chats').findOneAndUpdate({roomname: room},{$push: {messages: {_id: replyid, text: reply, replies: []}}});
+    db.collection('chats').findOneAndUpdate({roomname: room},{$push: {messages: {_id: replyid, text: reply, replies: [], likes: []}}});
+}
+
+//change like
+function changLike(room, mensid, username, callback){
+    var db = mongoConfigs.getDB();
+
+    db.collection("chats").find({roomname: room},{ projection: { _id: 0, messages: 1 } }).toArray(function(err,result) {
+        if (err) throw err;
+        var arrayindices = findElement(result[0].messages, mensid, [], 0);
+        var stringfield = 'messages';
+        for(var i = 0; i < arrayindices.length; i++){
+            if(i+1 === arrayindices.length){
+                stringfield += '.'+arrayindices[i];
+                stringfield += '.likes';
+                db.collection("chats").findOne({roomname: room, [stringfield]: [username]},{}, function(err,result){
+                    //console.log(result);
+                    //console.log(stringfield);
+                    if(result === null){
+                        db.collection("chats").findOneAndUpdate({roomname: room}, {$push: {[stringfield]: username}});
+                    }
+                    else{
+                        db.collection("chats").findOneAndUpdate({roomname: room}, {$pull: {[stringfield]: username}});
+                    }
+                    return callback(result);
+                })
+            }
+            else{
+                stringfield += '.'+arrayindices[i];
+                stringfield += '.replies';
+            }
+        }
+    });
 }
 
 module.exports = {
@@ -199,4 +231,5 @@ module.exports = {
     nameChanger,
     insertComment,
     createReply,
+    changLike,
 };

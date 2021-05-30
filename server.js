@@ -111,6 +111,12 @@ io.on('connection',function(socket){
 
         io.emit('insertreply',room, mensid, reply, id, username);
     })
+
+    socket.on('changelike',function(roomname, idmens, username){
+        return NotesController.changeLike(roomname, idmens, username, function(result){
+            io.emit('updatelike',roomname,idmens,username,result);
+        });
+    })
 });
 
 mongoConfigs.connect(function(err){

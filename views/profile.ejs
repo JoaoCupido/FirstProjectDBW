@@ -300,7 +300,7 @@
             })
 
             socket.on('insertreply',function(room,mensid,reply,replyid,username){
-                $('#messages').append('<li id=' + replyid + ' class="message">' + ('<span class="message-username">' + username + ": " + '</span>' + '<span class="message-content" >' + reply + '</span>') + '</li>');
+                $('#messages').append('<li id=' + replyid + ' class="message">' + '<a href="#' + mensid + '">' +('<span class="message-username">' + username + ": " + '</span>' + '<span class="message-content" >' + reply + '</span>') + '</a>' + '</li>');
                 $('li#' + replyid).append('<button id="' + replyid + '" class="comment"><img src="/img/comment.png" alt="Comment"/></button>');
                 $('li#' + replyid).append('<button id="' + replyid + '" class="reply"><img src="/img/reply.png" alt="Direct Reply"/></button>');
 

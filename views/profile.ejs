@@ -62,11 +62,13 @@
             });
 
             $('#feed_form').submit(function () {
-                // go to socket server with room name
-                socket.emit('chat message', $('#m').val(), document.getElementById("titleroom").innerHTML, document.getElementById("usernamelogin").innerHTML);
-                console.log($('#m').val());
-                // reset message
-                $('#m').val('');
+                if($('#m').val() != "") {
+                    // go to socket server with room name
+                    socket.emit('chat message', $('#m').val(), document.getElementById("titleroom").innerHTML, document.getElementById("usernamelogin").innerHTML);
+                    console.log($('#m').val());
+                    // reset message
+                    $('#m').val('');
+                }
                 return false;
             });
 
@@ -247,7 +249,6 @@
             })
 
             $(document).on("click","button.comment",function() {
-                //erro
                 var idmens = this.id;
 
                 //alert to insert comment (can happen to be null)
@@ -291,7 +292,6 @@
             </div>
         </div>
     </div>
-</div>
     <!--
 <div id="Join_Chat">
     <form id="Join_Chat_Form">

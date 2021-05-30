@@ -26,6 +26,18 @@ function insertGroup(creator, namegroupe, callback){
         callback(err,result);
     });
 }
+/*
+{
+    "_id": {
+        "$oid": "60b38bae4ec5061c08df6d6d"
+    },
+    "name": ["Global Chat"],
+    "admin": "AAAAAAAAAAAAAAAAAAAA",
+    "users": ["AAAAAAAAAAAAAAAAAAAA", "JoaoCupido", "meunome", "test", "d", "diogo0911", "dda", "pingooo"],
+    "messages": [],
+    "roomname": "Global Chat"
+}
+ */
 
 //delete user from group
 function removeGroup(participant, roomname, callback){
@@ -136,7 +148,7 @@ function insertComment(room, mensid, comentario, comentarioid){
 
     db.collection("chats").find({roomname: room},{ projection: { _id: 0, messages: 1 } }).toArray(function(err,result){
         if(err) throw err;
-        var arrayindices = findElement(result[0].messages, room, mensid,comentario,comentarioid,[]);
+        var arrayindices = findElement(result[0].messages, room, mensid,comentario,comentarioid,[], 0);
         var stringfield = 'messages';
         for(var i = 0; i < arrayindices.length; i++){
             if(i+1 === arrayindices.length){
@@ -152,8 +164,8 @@ function insertComment(room, mensid, comentario, comentarioid){
     })
 }
 
-function findElement(array, room, mensid,comentario,comentarioid,arrayindices){
-    for(var i = 0; i < array.length; i++){
+function findElement(array, room, mensid,comentario,comentarioid,arrayindices, i){
+    for(i; i < array.length; i++){
         var textobj = array[i];
         if(textobj._id == mensid){
             arrayindices.push(i);
@@ -161,7 +173,7 @@ function findElement(array, room, mensid,comentario,comentarioid,arrayindices){
         }
         else if(textobj._id != mensid && textobj.replies.length > 0){
             arrayindices.push(i);
-            findElement(textobj.replies,room,mensid,comentario,comentarioid,arrayindices);
+            findElement(textobj.replies,room,mensid,comentario,comentarioid,arrayindices, 0);
         }
     }
     return arrayindices;

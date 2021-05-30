@@ -214,40 +214,6 @@ button.send {
   bottom: 25px;
 }
 
-
-/* FONTE: https://codepen.io/DavidBradbury/pen/HuCqx */
-
-.input-hidden {
-  position: absolute;
-  left: -9999px;
-}
-
-input[type=radio]:checked + label>img {
-  border: 1px solid #fff;
-  box-shadow: 0 0 3px 3px #090;
-}
-
-/* Stuff after this is only to make things more pretty */
-input[type=radio] + label>img {
-  border: 1px dashed #444;
-  width: 150px;
-  height: 150px;
-  transition: 500ms all;
-}
-
-input[type=radio]:checked + label>img {
-  transform:
-          rotateZ(-10deg)
-          rotateX(10deg);
-}
-
-
-.homeimage {
-  text-align: center;
-  width: 50%;
-  height: auto;
-}
-
 input[type="text_msg"]{
   background-color: var(--color-white);
   border: 1px solid var(--color-white);

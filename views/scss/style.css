@@ -360,6 +360,8 @@ button.comment:hover, button.comment:focus, button.reply:hover, button.reply:foc
   border-radius: 2px;
   padding: 8px;
   margin: 4px;
+  max-height: 400px;
+  overflow: auto;
 }
 #chatroom_invitations #invitations_chat_rooms span {
   overflow: hidden;

@@ -307,7 +307,7 @@ li.message .message-username, li.comment .message-username {
   font-weight: bold;
 }
 
-button.comment, button.reply {
+button.comment, button.reply, button.like {
   margin-left: 8px;
   display: inline-block;
   padding: 1px;
@@ -315,12 +315,12 @@ button.comment, button.reply {
   background-color: var(--color-soft-blue);
   border: solid 1px var(--color-black);
 }
-button.comment img, button.reply img {
+button.comment img, button.reply img, button.like img {
   width: 14px;
   height: 14px;
   padding: 1px;
 }
-button.comment:hover, button.comment:focus, button.reply:hover, button.reply:focus {
+button.comment:hover, button.comment:focus, button.reply:hover, button.reply:focus, button.like:hover, button.like:focus {
   border: solid 1px var(--color-blue);
 }
 

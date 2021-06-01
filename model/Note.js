@@ -149,7 +149,8 @@ function insertComment(room, mensid, comentario, comentarioid){
 
     db.collection("chats").find({roomname: room},{ projection: { _id: 0, messages: 1 } }).toArray(function(err,result){
         if(err) throw err;
-        var arrayindices = findElement(result[0].messages, mensid,[], 0);
+        var arrayindices = findElement(result[0].messages, mensid,[]);
+        console.log(arrayindices);
         var stringfield = 'messages';
         for(var i = 0; i < arrayindices.length; i++){
             if(i+1 === arrayindices.length){
@@ -165,17 +166,25 @@ function insertComment(room, mensid, comentario, comentarioid){
     })
 }
 
-//find where to put comment
-function findElement(array, mensid,arrayindices, i){
-    for(i; i < array.length; i++){
-        var textobj = array[i];
-        if(textobj._id == mensid){
-            arrayindices.push(i);
+//find where to put comment or like
+function findElement(array, mensid,arrayindices){
+    for(var ele in array){
+        var objec = array[ele];
+        //console.log(objec);
+        if(objec == null){
+            //console.log(objec);
+            //console.log(array);
+            continue;
+        }
+        if(objec._id == mensid){
+            arrayindices.push(array.indexOf(objec));
             break;
         }
-        else if(textobj._id != mensid && textobj.replies.length > 0){
-            arrayindices.push(i);
-            findElement(textobj.replies,mensid,arrayindices, 0);
+        else if(objec._id != mensid && objec.replies.length > 0){
+            //console.log(objec);
+            //console.log(array);
+            arrayindices.push(array.indexOf(objec));
+            findElement(objec.replies,mensid,arrayindices);
         }
     }
     return arrayindices;
